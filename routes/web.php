@@ -35,3 +35,11 @@ Route::post('/logout', [LoginController::class, "Logout"])-> name('logout');
 Route::get('/products', function(){
     return view('/products');
 })->middleware('auth');
+
+
+
+//Solo para el admin
+
+Route::get('/controlPanel', function(){
+    return view('admin.controlPanel');
+})->middleware(['auth', 'role:Administrador']);
