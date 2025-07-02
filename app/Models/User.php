@@ -8,6 +8,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * Class User
@@ -28,7 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class User extends Model
+class User extends Authenticatable
 {
 	protected $table = 'users';
 	protected $primaryKey = 'user_id';
@@ -62,5 +64,17 @@ class User extends Model
 	public function carts()
 	{
 		return $this->hasMany(Cart::class);
+	}
+
+	//Hasheao automático para el password al registrar
+	public function setPasswordAttribute($value){
+		$this->attributes['password'] = Hash::needsRehash($value) ? Hash::make($value) : $value;
+	}
+
+	//Devolver la URL completa de la imagen de perfil
+	public function getProfileImgUrlAttribute(){
+		return $this->profile_img_name
+			? url('img/users/' . $this->profile_img_name)
+			: url('img/users/default.png');
 	}
 }
