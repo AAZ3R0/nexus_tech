@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Admin\ProductController;
 
 /*
 Route::get('/', function () {
@@ -43,3 +44,14 @@ Route::get('/products', function(){
 Route::get('/controlPanel', function(){
     return view('admin.controlPanel');
 })->middleware(['auth', 'role:Administrador']);
+
+// Rutas de recurso para productos
+    Route::resource('AdminProducts', ProductController::class)->names([
+        'index' => 'admin.products.index',
+        'create' => 'admin.products.create',
+        'store' => 'admin.products.store',
+        'show' => 'admin.products.show',
+        'edit' => 'admin.products.edit',
+        'update' => 'admin.products.update',
+        'destroy' => 'admin.products.destroy',
+    ]);
