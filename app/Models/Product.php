@@ -46,6 +46,8 @@ class Product extends Model
 		'img_name'
 	];
 
+	protected $guarded = []; // Esto permite que los campos en $fillable sean asignados masivamente.
+
 	public function product_type()
 	{
 		return $this->belongsTo(ProductType::class, 'product_type_id', 'product_type_id');

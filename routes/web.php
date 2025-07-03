@@ -46,12 +46,12 @@ Route::get('/controlPanel', function(){
 })->middleware(['auth', 'role:Administrador']);
 
 // Rutas de recurso para productos
-    Route::resource('AdminProducts', ProductController::class)->names([
+    Route::resource('/AdminProducts', ProductController::class)->parameters([
+        'AdminProducts' => 'product',
+    ])->names([
         'index' => 'admin.products.index',
-        'create' => 'admin.products.create',
         'store' => 'admin.products.store',
         'show' => 'admin.products.show',
-        'edit' => 'admin.products.edit',
         'update' => 'admin.products.update',
         'destroy' => 'admin.products.destroy',
     ]);
