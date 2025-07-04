@@ -37,7 +37,7 @@ Route::get('/products', function(){
     return view('/products');
 })->middleware('auth');
 
-
+ 
 
 //Solo para el admin
 

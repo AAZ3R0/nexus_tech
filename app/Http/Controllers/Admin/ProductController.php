@@ -25,7 +25,7 @@ class ProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0.01',
             'stock' => 'required|integer|min:0',
-            'img_name' => 'required|image|mimes:jpg,jpeg,png|max:2040',
+            'img_name' => 'nullab|image|mimes:jpg,jpeg,png|max:2040',
         ]);
 
         $filename = 'default.png';
