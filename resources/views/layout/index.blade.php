@@ -65,7 +65,7 @@
     @yield('content')
 
     <!-- 🔸 FOOTER: pie de página fijo -->
-    <footer class="footer fixed-bottom bg-dark text-light py-3">
+    <footer class="footer absolute-bottom bg-dark text-light py-3">
         <div class="container">
             <div class="row align-items-center text-center text-md-start justify-content-between">
                 
