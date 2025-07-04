@@ -9,7 +9,7 @@
     <title>nexus_tech</title>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
     <!-- 🔷 NAVBAR: barra superior de navegación -->
     <nav class="bg-dark text-white p-1 navbar navbar-expand-lg">
@@ -65,7 +65,7 @@
     @yield('content')
 
     <!-- 🔸 FOOTER: pie de página fijo -->
-    <footer class="footer absolute-bottom bg-dark text-light py-3">
+    <footer class="footer d-flex bg-dark text-light py-3 mt-auto">
         <div class="container">
             <div class="row align-items-center text-center text-md-start justify-content-between">
                 
