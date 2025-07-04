@@ -54,4 +54,5 @@ Route::get('/controlPanel', function(){
         'show' => 'admin.products.show',
         'update' => 'admin.products.update',
         'destroy' => 'admin.products.destroy',
-    ]);
+    ])
+    ->middleware(['auth', 'role:Administrador']);
