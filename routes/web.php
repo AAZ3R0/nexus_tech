@@ -3,7 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Admin\userController;
 use App\Http\Controllers\Admin\ProductController;
+
+
 
 /*
 Route::get('/', function () {
@@ -41,11 +44,11 @@ Route::get('/products', function(){
 
 //Solo para el admin
 
-Route::get('/controlPanel', function(){
-    return view('admin.controlPanel');
-})->middleware(['auth', 'role:Administrador']);
+    Route::get('/controlPanel', function(){
+        return view('admin.controlPanel');
+    })->middleware(['auth', 'role:Administrador']);
 
-// Rutas de recurso para productos
+    // Rutas de recurso para productos
     Route::resource('/AdminProducts', ProductController::class)->parameters([
         'AdminProducts' => 'product',
     ])->names([
@@ -54,5 +57,15 @@ Route::get('/controlPanel', function(){
         'show' => 'admin.products.show',
         'update' => 'admin.products.update',
         'destroy' => 'admin.products.destroy',
+    ])
+    ->middleware(['auth', 'role:Administrador']);
+
+    //Rutas de recurso para usuarios
+    Route::resource('/AdminUsers', userController::class)->parameters([
+        'AdminUsers' => 'user',
+    ])->names([
+        'index' => 'admin.users.index',
+        'show' => 'admin.users.show',
+        'destroy' => 'admin.users.destroy',
     ])
     ->middleware(['auth', 'role:Administrador']);

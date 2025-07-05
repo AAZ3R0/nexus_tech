@@ -63,7 +63,7 @@ class User extends Authenticatable
 
 	public function carts()
 	{
-		return $this->hasMany(Cart::class);
+		return $this->belongsTo(Cart::class, 'cart_id');
 	}
 
 	//Hasheao automático para el password al registrar
