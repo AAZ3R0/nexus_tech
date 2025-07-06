@@ -10,12 +10,19 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+
     public function index()
     {
         $products = Product::with('product_type')->paginate(10);
         $productTypes = ProductType::all();
         return view('admin.productsTable', compact('products', 'productTypes'));
     }
+
+    public function ProductUser(){
+        $products = Product::all();
+        return view('Products', compact('products'));
+    }
+    
 
     public function store(Request $request)
     {

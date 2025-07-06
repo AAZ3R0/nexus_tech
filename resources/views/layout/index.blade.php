@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
+    @vite(['resources/js/app.js', 'resources/css/app.css'])
     <title>nexus_tech</title>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-
+    
+    @stack('scripts')
     <!-- 🔷 NAVBAR: barra superior de navegación -->
-    <nav class="bg-dark text-white p-1 navbar navbar-expand-lg">
+    <nav class="bg-dark text-white py-3 navbar navbar-expand-lg">
         <div class="container-fluid">
 
             <!-- Logo del sitio -->
@@ -29,7 +30,7 @@
                         <a href="#" class="nav-link link-info px-2">Inicio</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a href="#" class="nav-link link-info px-2">Catálogo</a>
+                        <a href="{{ url('/products') }}" class="nav-link link-info px-2">Catálogo</a>
                     </li>
                     <li class="nav-item me-2">
                         <a href="#" class="nav-link link-info px-2">Sobre nosotros</a>
@@ -54,7 +55,7 @@
 
                 <!-- 🔹 Botón del carrito -->
                 <button class="btn btn-outline-light ms-2" type="button">
-                    <i class="bi bi-cart2"></i>
+                    <a href="{{ route('user.cart') }}" class="nav-link"><i class="bi bi-cart2"></i></a>
                 </button>
 
             </div>
@@ -65,8 +66,8 @@
     @yield('content')
 
     <!-- 🔸 FOOTER: pie de página fijo -->
-    <footer class="footer d-flex bg-dark text-light py-3 mt-auto">
-        <div class="container">
+    <footer class="footer d-flex bg-dark text-light  mt-auto">
+        <div class="container-fluid py-3 mx-5">
             <div class="row align-items-center text-center text-md-start justify-content-between">
                 
                 <!-- 🔹 Columna 1: Texto informativo de la empresa -->
@@ -83,12 +84,12 @@
                 <!-- 🔹 Columna 2: Logo centrado -->
                 <div class="col-md-2 mb-2 mb-md-0 text-center">
                     <a class="navbar-brand" href="#">
-                        <img src="{{ asset('img/Logo_pagina.png') }}" class="img-fluid" style="max-height: 70px;" alt="Logo">
+                        <img src="{{ asset('img/Logo_pagina.png') }}" class="img-fluid" style="max-height: 100px;" alt="Logo">
                     </a>
                 </div>
 
                 <!-- 🔹 Columna 3: Información de contacto y redes sociales -->
-                <div class="col-md-6 mb-2 mb-md-0">
+                <div class="col-md-4 mb-2 mb-md-0">
                     <div class="row">
                         <!-- Contacto -->
                         <div class="col-md-6">
@@ -98,7 +99,7 @@
                         </div>
 
                         <!-- Redes sociales -->
-                        <div class="col-md-6 text-md-end">
+                        <div class="col-md text-md-end">
                             <p class="mb-1">Nuestras redes sociales</p>
                             <a href="https://facebook.com" target="_blank" class="btn btn-outline-light btn-sm me-2">
                                 <i class="bi bi-facebook"></i>
