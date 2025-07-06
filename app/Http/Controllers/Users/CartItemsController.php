@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class CartItemsController extends Controller
 {
     public function index(){
-        
+
         $user = Auth::user(); //variable que guarda el usuario autenticado
         $userID = $user->user_id; //variable que guarda el id del usuario autenticado
         $cart = Cart::firstOrCreate(['user_id' => $userID]); //busca el carrito del usuario autenticado
@@ -24,103 +24,151 @@ class CartItemsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,products_id', 
-            'count' => 'required|numeric|min:1', 
+            'product_id' => 'required|exists:products,products_id',
+            'count' => 'required|numeric|min:1',
         ]);
 
-        $userID = Auth::id(); 
+        $userID = Auth::id();
         if (!$userID) {
             return response()->json(['success' => false, 'message' => 'Debes iniciar sesión.'], 401);
         }
 
-        $cart = Cart::firstOrCreate(['user_id' => $userID]); 
-        $product = Product::find($request->product_id); 
+        $cart = Cart::firstOrCreate(['user_id' => $userID]);
+        $product = Product::find($request->product_id);
 
         if (!$product) {
             return response()->json(['success' => false, 'message' => 'El producto no existe.'], 404);
         }
-        
-        $unitPrice = $product->price; 
 
-        $existingCartItem = CartItem::where('cart_id', $cart->cart_id) 
-                                    ->where('products_id', $product->products_id) 
+        $unitPrice = $product->price;
+
+        $existingCartItem = CartItem::where('cart_id', $cart->cart_id)
+                                    ->where('products_id', $product->products_id)
                                     ->first();
 
         if ($existingCartItem) {
-            $existingCartItem->count += $request->count; 
-            $existingCartItem->unit_price = $unitPrice; 
+            $existingCartItem->count += $request->count;
+            $existingCartItem->unit_price = $unitPrice;
             $existingCartItem->save();
             $message = 'Cantidad del producto actualizada en el carrito.';
         } else {
             $cartItem = CartItem::create([
-                'cart_id' => $cart->cart_id, 
-                'products_id' => $product->products_id, 
+                'cart_id' => $cart->cart_id,
+                'products_id' => $product->products_id,
                 'count' => $request->count,
                 'unit_price' => $unitPrice,
             ]);
             $message = 'Producto agregado al carrito.';
         }
 
-        // --- ¡AQUÍ ES DONDE DEBE ESTAR LA DEFINICIÓN DE LA VARIABLE! ---
         // Calcula el nuevo total de ítems en el carrito (o la suma de las cantidades)
-        // Esto se ejecuta SÍ o SÍ después de la creación/actualización del CartItem.
-        $newCartItemCount = CartItem::where('cart_id', $cart->cart_id)->sum('count'); 
-        // O si quieres el número de productos *diferentes* en el carrito:
-        // $newCartItemCount = CartItem::where('cart_id', $cart->cart_id)->count();
+        $newCartItemCount = CartItem::where('cart_id', $cart->cart_id)->sum('count');
 
-        // Ahora $newCartItemCount está definida y lista para usarse
         return response()->json([
             'success' => true,
             'message' => $message,
-            'newCartItemCount' => $newCartItemCount 
+            'newCartItemCount' => $newCartItemCount
         ]);
     }
 
     public function updateQuantity(Request $request, CartItem $cartItem){
+        // Cambiado 'action' por 'operation'
         $request->validate([
-            'action' => 'required|in:increase,decrease',
+            'operation' => 'required|in:increase,decrease',
         ]);
 
         if(Auth::id() != $cartItem->cart->user_id){
-            return redirect()->route('user.cart')->with('error', 'No tienes permiso para modificar este item.');
+            // Si el usuario no tiene permiso, devolver JSON
+            return response()->json(['success' => false, 'message' => 'No tienes permiso para modificar este item.'], 403);
         }
 
-        if($request->action === 'increase'){
+        // Cambiado $request->action por $request->operation
+        if($request->operation === 'increase'){
             $cartItem->count++;
-        } elseif ($request->action === 'decrease'){
+        } elseif ($request->operation === 'decrease'){
             $cartItem->count--;
         }
 
         if($cartItem->count <= 0){
-            $cartItem->delete(); // Elimina el item si se reduce a 0 o menos
-            return redirect()->route('user.cart')->with('success', 'Item eliminado del carrito.');
+            $cartItem->delete();
+            // Devuelve JSON indicando que el ítem fue eliminado
+            $cart = $cartItem->cart; // Obtener el carrito asociado
+            $subtotalGeneral = CartItem::where('cart_id', $cart->cart_id)->get()->sum(function($item) {
+                return $item->count * $item->unit_price;
+            });
+            $totalProductsCount = CartItem::where('cart_id', $cart->cart_id)->sum('count');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Item eliminado del carrito.',
+                'item_removed' => true, // Indicador para JavaScript
+                'itemId' => $cartItem->id_cart_items, // Para saber qué elemento HTML eliminar
+                'newSubtotalGeneral' => number_format($subtotalGeneral, 2, '.', ''),
+                'newTotalProductsCount' => $totalProductsCount,
+            ]);
         }
 
         $cartItem->save();
 
-        return redirect()-> route('user.cart')-> with('success', 'Cantidad del producto actualizada en el carrito.');
+        // Calcula los nuevos subtotales y la cantidad total de artículos para actualizar la vista
+        $subtotalItem = $cartItem->count * $cartItem->unit_price;
+        $cart = $cartItem->cart; // Obtener el carrito asociado
+        $subtotalGeneral = CartItem::where('cart_id', $cart->cart_id)->get()->sum(function($item) {
+            return $item->count * $item->unit_price;
+        });
+        $totalProductsCount = CartItem::where('cart_id', $cart->cart_id)->sum('count');
+
+        // Devuelve JSON con los datos actualizados
+        return response()->json([
+            'success' => true,
+            'message' => 'Cantidad del producto actualizada en el carrito.',
+            'newCount' => $cartItem->count,
+            'newSubtotalItem' => number_format($subtotalItem, 2, '.', ''),
+            'newSubtotalGeneral' => number_format($subtotalGeneral, 2, '.', ''),
+            'newTotalProductsCount' => $totalProductsCount,
+        ]);
     }
 
-    public function destroy(CartItem $cartItem) // Laravel inyectará el CartItem basado en el ID de la ruta
+    public function destroy(CartItem $cartItem)
     {
         $cartItem->load('cart');
-        // Asegúrate de que el usuario autenticado es dueño del carrito y del ítem
-        // O al menos que el cartItem pertenece al cart del usuario actual
         if (Auth::id() != $cartItem->cart->user_id) {
-            return redirect()->route('user.cart')->with('error', 'No tienes permiso para eliminar este ítem.');
+            return response()->json(['success' => false, 'message' => 'No tienes permiso para eliminar este ítem.'], 403);
         }
+
+        $itemId = $cartItem->id_cart_items; // Guarda el ID antes de eliminarlo
+        $cart = $cartItem->cart; // Obtener el carrito asociado
 
         $cartItem->delete();
 
-        return redirect()->route('user.cart')->with('success', 'Producto eliminado del carrito.');
+        // Recalcular los totales después de la eliminación
+        $subtotalGeneral = CartItem::where('cart_id', $cart->cart_id)->get()->sum(function($item) {
+            return $item->count * $item->unit_price;
+        });
+        $totalProductsCount = CartItem::where('cart_id', $cart->cart_id)->sum('count');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Producto eliminado del carrito.',
+            'item_removed' => true,
+            'itemId' => $itemId, // ID del ítem eliminado para JS
+            'newSubtotalGeneral' => number_format($subtotalGeneral, 2, '.', ''),
+            'newTotalProductsCount' => $totalProductsCount,
+            'cartEmpty' => CartItem::where('cart_id', $cart->cart_id)->doesntExist() // Para saber si el carrito quedó vacío
+        ]);
     }
 
     public function deleteAll(){
         $userID = Auth::id();
         $cart = Cart::firstOrCreate(['user_id' => $userID]);
 
-        $CartItems = CartItem::where('cart_id', $cart->cart_id)->delete();
+        CartItem::where('cart_id', $cart->cart_id)->delete();
 
-        return redirect()->route('user.product')->with('success', 'Compra realizada con éxito(?)');
+        return response()->json([
+            'success' => true,
+            'message' => 'Compra realizada con éxito.', // Mensaje más neutro si se va a redirigir
+            'cart_cleared' => true, // Indicador para JS de que el carrito está vacío
+            'redirect_url' => route('user.product') // URL a la que redirigir
+        ]);
     }
 }
