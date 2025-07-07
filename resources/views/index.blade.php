@@ -55,7 +55,7 @@
 
             </div>
         </div>
-    </nav><br>
+    </nav>
 
     <!-- 🔻 Contenido dinámico (Blade) -->
     @yield('content')

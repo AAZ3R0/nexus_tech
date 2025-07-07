@@ -14,7 +14,7 @@
     
     @stack('scripts')
     <!-- 🔷 NAVBAR: barra superior de navegación -->
-    <nav class="bg-dark text-white py-3 navbar navbar-expand-lg">
+    <nav class="bg-primary text-white py-3 navbar navbar-expand-lg">
         <div class="container-fluid">
 
             <!-- Logo del sitio -->
@@ -64,13 +64,13 @@
 
             </div>
         </div>
-    </nav><br>
+    </nav>
 
     <!-- 🔻 Contenido dinámico (Blade) -->
     @yield('content')
 
     <!-- 🔸 FOOTER: pie de página fijo -->
-    <footer class="footer d-flex bg-dark text-light  mt-auto">
+    <footer class="footer d-flex bg-primary text-light  mt-auto">
         <div class="container-fluid py-3 mx-5">
             <div class="row align-items-center text-center text-md-start justify-content-between">
                 

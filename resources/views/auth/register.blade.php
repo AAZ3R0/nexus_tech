@@ -1,32 +1,66 @@
 @extends("layout.index")
 @section('content')
 
+<div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100vh; background-color: #111B1F;">
+    <div class="card p-4 shadow-lg" style="min-width: 320px; max-width: 600px; width: 100%; background-color: #1E2A30; color: white;">
+        <h2 class="text-center mb-4 text-white">Registro</h2>
 
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-    <h2>Registro</h2>
+        <form method="POST" enctype="multipart/form-data" action="{{ url('/register') }}">
+            @csrf
 
-    @if ($errors->any())
-        <div>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+            <div class="mb-3">
+                <input type="text" name="name" class="form-control bg-light text-white border-0" placeholder="Nombre" value="{{ old('name') }}">
+            </div>
 
-    <form method="POST" enctype="multipart/form-data" action="{{ url('/register') }}">
-        @csrf
-        <input type="text" name="name" placeholder="Nombre" value="{{ old('name') }}"><br>
-        <input type="text" name="last_name" placeholder="Apellido" value="{{ old('last_name') }}"><br>
-        <input type="text" name="username" placeholder="Usuario" value="{{ old('username') }}"><br>
-        <input type="email" name="email" placeholder="Email" value="{{ old('email') }}"><br>
-        <input type="password" name="password" placeholder="Contraseña"><br>
-        <input type="password" name="password_confirmation" placeholder="Confirmar contraseña"><br>
-        <input type="text" name="phone_number" placeholder="Teléfono" value="{{ old('phone_number') }}"><br>
-        <input type="text" name="address" placeholder="Dirección" value="{{ old('address') }}"><br>
-        <input type="file" name="profile_img_name" placeholder="Foto de perfil" value="{{ old('profile_img_name') }}"><br>
-        <button type="submit">Registrarse</button>
-    </form>
+            <div class="mb-3">
+                <input type="text" name="last_name" class="form-control bg-light text-white border-0" placeholder="Apellido" value="{{ old('last_name') }}">
+            </div>
 
-    @endsection
+            <div class="mb-3">
+                <input type="text" name="username" class="form-control bg-light text-white border-0" placeholder="Usuario" value="{{ old('username') }}">
+            </div>
+
+            <div class="mb-3">
+                <input type="email" name="email" class="form-control bg-light text-white border-0" placeholder="Email" value="{{ old('email') }}">
+            </div>
+
+            <div class="mb-3">
+                <input type="password" name="password" class="form-control bg-light text-white border-0" placeholder="Contraseña">
+            </div>
+
+            <div class="mb-3">
+                <input type="password" name="password_confirmation" class="form-control bg-light text-white border-0" placeholder="Confirmar contraseña">
+            </div>
+
+            <div class="mb-3">
+                <input type="text" name="phone_number" class="form-control bg-light text-white border-0" placeholder="Teléfono" value="{{ old('phone_number') }}">
+            </div>
+
+            <div class="mb-3">
+                <input type="text" name="address" class="form-control bg-light text-white border-0" placeholder="Dirección" value="{{ old('address') }}">
+            </div>
+
+            <div class="mb-3">
+                <input type="file" name="profile_img_name" class="form-control bg-light text-white border-0">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+        </form>
+
+        <p class="mt-3 text-center mb-0 text-white">
+            ¿Ya tienes una cuenta? <a href="{{ url('/login') }}" class="text-decoration-none text-info">Inicia sesión</a>
+        </p>
+    </div>
+</div>
+
+@endsection
