@@ -1,7 +1,7 @@
-@extends("layout.index")
+@extends("layout.PlantillaGuest")
 @section('content')
 
-<div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100vh; background-color: #111B1F;">
+<div class="container-fluid d-flex bg-primary justify-content-center align-items-center" style="min-height: 100vh;">
     <div class="card p-4 shadow-lg" style="min-width: 320px; max-width: 600px; width: 100%; background-color: #1E2A30; color: white;">
         <h2 class="text-center mb-4 text-white">Login</h2>
 

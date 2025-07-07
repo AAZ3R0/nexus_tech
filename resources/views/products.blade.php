@@ -1,4 +1,4 @@
-@extends('layout.index')
+@extends('layout.PlantillaUser')
 @section('content')
 
 <div class="container m-auto">

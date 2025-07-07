@@ -14,7 +14,7 @@
     
     @stack('scripts')
     <!-- 🔷 NAVBAR: barra superior de navegación -->
-    <nav class="bg-primary text-white py-3 navbar navbar-expand-lg">
+    <nav class=" text-white py-3 navbar navbar-expand-lg" style= "background-color: #111B1F;">
         <div class="container-fluid">
 
             <!-- Logo del sitio -->
@@ -36,13 +36,14 @@
                     <li class="nav-item me-2">
                         <a href="#" class="nav-link link-info px-2">Sobre nosotros</a>
                     </li>
-                    <li class="nav-item me-5">
-                        <form action="{{ route('logout') }}" method="post">
-                            @csrf
-                            <button type="submit" class="nav-link link-danger px-2">Cerrar sesión</button>
-                        </form>
-                        
+                    <li class="nav-item me-2">
+                        <a href="{{ url('/login') }}" class="nav-link link-info px-2">Iniciar session</a>
                     </li>
+                    <li class="nav-item me-2">
+                        <a href="{{ url('/register') }}" class="nav-link link-info px-2">Registrarse</a>
+                    </li>
+                    
+ 
                 </ul>
 
                 <!-- 🔹 Barra de búsqueda -->
@@ -70,7 +71,7 @@
     @yield('content')
 
     <!-- 🔸 FOOTER: pie de página fijo -->
-    <footer class="footer d-flex bg-primary text-light  mt-auto">
+    <footer class="footer d-flex text-light  mt-auto" style="background-color: #111B1F;">
         <div class="container-fluid py-3 mx-5">
             <div class="row align-items-center text-center text-md-start justify-content-between">
                 

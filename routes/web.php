@@ -16,8 +16,8 @@ Route::get('/', function () {
 */
 
 Route::get('/', function () {
-    return view('layout/index');
-});
+    return view('/index');
+})->middleware('guest');
 
 //Registro
 Route::get('/register', [RegisterController::class, "ShowRegisterForm"])
