@@ -55,9 +55,12 @@
                 </form>
 
                 <!-- 🔹 Botón del carrito -->
-                <button class="btn btn-outline-light ms-2" type="button">
-                    <a href="{{ route('user.cart') }}" class="nav-link"><i class="bi bi-cart2"></i></a>
-                </button>
+                <li class="d-flex align-items-center nav-item">
+                    <a class="nav-link" href="{{ route('user.cart') }}">
+                        <i class="bi bi-cart"></i>
+                        <span class="badge bg-danger rounded-pill" id="cart-count">{{$newCartItemCount ?? 0}}</span>
+                    </a>
+                </li>
 
             </div>
         </div>
@@ -115,8 +118,23 @@
             </div>
         </div>
     </footer>
+
+    {{-- Contenedor para las notificaciones Toast (normalmente en layout.index) --}}
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast text-white" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto" id="toast-title">Notificación</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toast-body">
+                </div>
+        </div>
+    </div>
     
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- Script de carrito --}}
+    <script src="{{ asset('js/cart.js') }}"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </html>
