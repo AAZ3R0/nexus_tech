@@ -59,8 +59,8 @@
                 </ul>
 
                 <!-- 🔹 Barra de búsqueda -->
-                <form class="d-flex align-items-center me-3" role="search" style="position: relative; max-width: 500px;">
-                    <input class="form-control" type="search" placeholder="Buscar" aria-label="Search" style="padding-right: 100px;">
+                <form class="d-flex align-items-center me-3" role="search" style="position: relative; max-width: 500px;" action="{{ route('products.search') }}" method="GET">
+                    <input class="form-control" type="search" placeholder="Buscar" aria-label="Search" name="query" value="{{ request('query') }}" style="padding-right: 100px;">
                     <button class="btn btn-outline-success position-absolute" type="submit"
                             style="top: 0; right: 0; height: 100%; border-top-left-radius: 0; border-bottom-left-radius: 0;">
                         <i class="bi bi-search"></i>

@@ -19,9 +19,29 @@ class ProductController extends Controller
         return view('admin.productsTable', compact('products', 'productTypes'));
     }
 
-    public function ProductUser(){
-        $products = Product::all();
+    public function ProductUser(Request $request){
+
+
+        //Obtener el término de búsqueda de la URL
+        $query = $request->input('query');
+
+        //Inicia la consulta de productos
+        $products = Product::query();
+
+        if($query){
+            $products->where('name', 'like', '%' . $query . '%')
+                    ->orWhere('description', 'like', '%' . $query . '%');
+        }
+
+
+
+        $products = $products->get();
         return view('Products', compact('products'));
+    }
+
+    public function search(Request $request)
+    {
+        return $this->ProductUser($request); // Simplemente llama al método ProductUser
     }
     
 

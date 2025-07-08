@@ -43,6 +43,10 @@ Route::middleware(['auth', 'role:Usuario'])->group(function() {
     //Productos
     Route::get('/products', [ProductController::class, "ProductUser"])->name('user.product');
     Route::post('/products', [CartItemsController::class, "store"])->name('cart.add-item');
+
+    //Búsquedas
+    Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
+
     //Carrito
     Route::patch('/cart/{cartItem}/update-quantity', [CartItemsController::class, "updateQuantity"])->name('cart.update-item-quantity');
     Route::delete('/UserCart', [CartItemsController::class, "deleteAll"])->name('delete.cart.items');
