@@ -19,29 +19,83 @@ class ProductController extends Controller
         return view('admin.productsTable', compact('products', 'productTypes'));
     }
 
-    public function ProductUser(Request $request){
-
-
-        //Obtener el término de búsqueda de la URL
+    public function ProductUser(Request $request)
+    {
+        // 1. Obtener el término de búsqueda de la URL (para la barra de búsqueda)
         $query = $request->input('query');
 
-        //Inicia la consulta de productos
+        // 2. Obtener los parámetros de filtro y ordenamiento
+        $productTypeId = $request->input('product_type_id');
+        $sortByName = $request->input('sort_by_name');
+        $minPrice = $request->input('min_price');
+        $maxPrice = $request->input('max_price');
+
+        // Iniciar la consulta de productos
         $products = Product::query();
 
-        if($query){
-            $products->where('name', 'like', '%' . $query . '%')
-                    ->orWhere('description', 'like', '%' . $query . '%');
+        // Aplicar la búsqueda por nombre/descripción (si hay)
+        if ($query) {
+            $products->where(function ($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%')
+                  ->orWhere('description', 'like', '%' . $query . '%');
+            });
+        }
+
+        // Aplicar el filtro por tipo de producto (si hay)
+        if ($productTypeId) {
+            $products->where('product_type_id', $productTypeId);
+        }
+
+        // Aplicar el filtro por precio mínimo (si hay un valor, incluso 0)
+        // Convertimos a float para asegurar la comparación correcta
+        if ($minPrice !== null && $minPrice !== '') {
+            $products->where('price', '>=', (float)$minPrice);
+        }
+
+        // Aplicar el filtro por precio máximo (si hay un valor)
+        if ($maxPrice !== null && $maxPrice !== '') {
+            $products->where('price', '<=', (float)$maxPrice);
+        }
+
+        // Aplicar el ordenamiento por nombre (si hay)
+        if ($sortByName === 'asc') {
+            $products->orderBy('name', 'asc');
+        } elseif ($sortByName === 'desc') {
+            $products->orderBy('name', 'desc');
+        }
+
+        // Obtener los productos (filtrados o todos)
+        $products = $products->get();
+
+        // Obtener todos los tipos de producto para el dropdown del filtro
+        $productTypes = ProductType::all();
+
+        // Obtener el precio máximo actual de todos los productos para el slider de rango
+        // Esto es importante para establecer el 'max' correcto en el input range.
+        $maxProductPrice = Product::max('price');
+        // Si no hay productos, o max devuelve null, establece un valor por defecto sensato.
+        if ($maxProductPrice === null) {
+            $maxProductPrice = 1000; // Un valor por defecto, ajústalo según tus productos
+        } else {
+             // Redondear hacia arriba a la próxima decena, centena, etc., para una barra más "suave"
+             // Por ejemplo, si el máximo es 95, el slider irá a 100. Si es 950, a 1000.
+            $maxProductPrice = ceil($maxProductPrice / 100) * 100;
+            // Asegurarse de que no sea 0 si hay productos pero el precio máximo es muy bajo.
+            if ($maxProductPrice == 0 && Product::count() > 0) {
+                 $maxProductPrice = 100;
+            }
         }
 
 
-
-        $products = $products->get();
-        return view('Products', compact('products'));
+        // Pasa los productos, tipos de producto y el precio máximo a la vista
+        return view('Products', compact('products', 'productTypes', 'maxProductPrice'));
     }
 
+    // El método search ya no es estrictamente necesario, ya que ProductUser maneja todo.
+    // Si la ruta `products.search` apunta a este método, puedes redirigir o simplemente llamarlo.
     public function search(Request $request)
     {
-        return $this->ProductUser($request); // Simplemente llama al método ProductUser
+        return $this->ProductUser($request); // Reutiliza la lógica principal
     }
     
 

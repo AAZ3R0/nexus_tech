@@ -2,7 +2,66 @@
 @section('content')
 
 <div class="container m-auto">
-    <h1>Lista de productos</h1>
+    <h1>Lista de productos @if(request('query')) para "{{ request('query') }}" @endif</h1>
+
+    ---
+
+    {{-- Controles de Filtro --}}
+    <form action="{{ route('user.product') }}" method="GET" class="mb-4" id="filterForm">
+        {{-- Mantener el término de búsqueda si existe --}}
+        <input type="hidden" name="query" value="{{ request('query') }}">
+
+        <div class="row g-3 align-items-end">
+            {{-- Filtro por Tipo de Producto --}}
+            <div class="col-md-3">
+                <label for="product_type" class="form-label">Filtrar por Tipo</label>
+                <select class="form-select" id="product_type" name="product_type_id">
+                    <option value="">Todos los Tipos</option>
+                    @foreach($productTypes as $type)
+                        <option value="{{ $type->product_type_id }}" {{ request('product_type_id') == $type->product_type_id ? 'selected' : '' }}>
+                            {{ $type->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Ordenar por Nombre --}}
+            <div class="col-md-3">
+                <label for="sort_by_name" class="form-label">Ordenar por Nombre</label>
+                <select class="form-select" id="sort_by_name" name="sort_by_name">
+                    <option value="">Sin Orden</option>
+                    <option value="asc" {{ request('sort_by_name') == 'asc' ? 'selected' : '' }}>A-Z (Ascendente)</option>
+                    <option value="desc" {{ request('sort_by_name') == 'desc' ? 'selected' : '' }}>Z-A (Descendente)</option>
+                </select>
+            </div>
+
+            {{-- Filtro por Rango de Precio (noUiSlider) --}}
+            <div class="col-md-4">
+                <label class="form-label">Rango de Precio: $<span id="minPriceDisplay">0</span> - $<span id="maxPriceDisplay">Máx</span></label>
+                <div id="price-slider"></div> {{-- Contenedor del noUiSlider --}}
+                
+                {{-- Campos ocultos para enviar los valores del slider --}}
+                <input type="hidden" name="min_price" id="hidden_min_price" value="{{ request('min_price', 0) }}">
+                <input type="hidden" name="max_price" id="hidden_max_price" value="{{ request('max_price', $maxProductPrice) }}">
+            </div>
+
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Aplicar</button>
+            </div>
+        </div>
+    </form>
+
+    ---
+
+    @if($products->isEmpty() && request('query'))
+        <div class="alert alert-warning" role="alert">
+            No se encontraron productos para tu búsqueda "{{ request('query') }}".
+        </div>
+    @elseif($products->isEmpty())
+        <div class="alert alert-info" role="alert">
+            No hay productos disponibles en este momento que coincidan con tus filtros.
+        </div>
+    @endif
 
     <div class="row">
         @foreach($products as $product)
@@ -15,14 +74,13 @@
                     <h5 class="card-title">{{$product->name}}</h5>
                     <p class="card-text">$ {{ number_format($product->price, 2) }}</p>
                     <button type="button" class="btn btn-lg rounded-circle btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ShowProduct{{ $product->products_id }}"><i class="bi bi-card-list"></i></button>
-                
+
                     @csrf
                     <button type="submit" class="btn btn-lg rounded-circle btn-outline-success"><i class="bi bi-plus"></i></button>
                 </form>
-                
+
             </div>
         </div>
-
 
         {{-- Modal SHOW (dentro del bucle) --}}
         <div class="modal fade" id="ShowProduct{{ $product->products_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -57,23 +115,15 @@
     </div>
 </div>
 
-
 @endsection
 
 @push('scripts')
 <script>
-    // Asegúrate de que esta función showToast esté accesible.
-    // Si la tienes en cart.js y ese archivo se carga en todas las páginas,
-    // o si la tienes en layout.index, entonces está bien.
-    // Si no, debes definirla aquí o en un archivo JS compartido (ej. app.js).
-
-    // Función para mostrar el Toast (puedes copiarla de cart.js si no la tienes global)
-    function showToast(message, type = 'info') { // type can be 'success', 'danger', 'warning', 'info'
+    function showToast(message, type = 'info') {
         const toastElement = document.getElementById('liveToast');
-        // Verifica si el toastElement existe antes de intentar usarlo
         if (!toastElement) {
             console.error('Toast element not found. Please ensure #liveToast exists in your HTML.');
-            alert(message); // Fallback to alert if toast element is missing
+            alert(message);
             return;
         }
         const toast = new bootstrap.Toast(toastElement);
@@ -83,7 +133,6 @@
         if (toastTitle) toastTitle.textContent = type.charAt(0).toUpperCase() + type.slice(1);
         if (toastBody) toastBody.textContent = message;
 
-        // Cambiar el color de fondo del Toast según el tipo
         toastElement.classList.remove('bg-success', 'bg-danger', 'bg-warning', 'bg-info');
         switch (type) {
             case 'success':
@@ -104,29 +153,71 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Escuchar el evento 'submit' de todos los formularios con la clase 'add-to-cart-form'
+        // --- noUiSlider Initialization ---
+        const priceSlider = document.getElementById('price-slider');
+        const minPriceDisplay = document.getElementById('minPriceDisplay');
+        const maxPriceDisplay = document.getElementById('maxPriceDisplay');
+        const hiddenMinPrice = document.getElementById('hidden_min_price');
+        const hiddenMaxPrice = document.getElementById('hidden_max_price');
+
+        // Get initial min and max price from hidden inputs (which hold values from request or defaults)
+        const initialMin = parseFloat(hiddenMinPrice.value);
+        const initialMax = parseFloat(hiddenMaxPrice.value);
+        const maxProductPrice = parseFloat('{{ $maxProductPrice }}'); // Get max price passed from controller
+
+        if (priceSlider) {
+            noUiSlider.create(priceSlider, {
+                start: [initialMin, initialMax], // Initial values for min and max
+                connect: true, // Connect the handles
+                range: {
+                    'min': 0, // Minimum possible price
+                    'max': maxProductPrice // Maximum price from your products
+                },
+                step: 1, // Increment step (e.g., allow only whole numbers for price)
+                tooltips: true, // Show tooltips on handles
+                format: { // Format for displaying numbers
+                    to: function (value) {
+                        return value.toFixed(0); // Display as whole numbers
+                    },
+                    from: function (value) {
+                        return Number(value);
+                    }
+                }
+            });
+
+            // Update display spans and hidden inputs when slider values change
+            priceSlider.noUiSlider.on('update', function (values, handle) {
+                // values[0] is min, values[1] is max
+                minPriceDisplay.textContent = values[0];
+                maxPriceDisplay.textContent = values[1];
+                hiddenMinPrice.value = values[0];
+                hiddenMaxPrice.value = values[1];
+            });
+
+            // Optional: Submit form when slider changes (e.g., after user releases handle)
+            // priceSlider.noUiSlider.on('change', function () {
+            //     document.getElementById('filterForm').submit();
+            // });
+        }
+        // --- End noUiSlider Initialization ---
+
+        // Lógica existente para el carrito (mantener sin cambios)
         document.querySelectorAll('.add-to-cart-form').forEach(form => {
             form.addEventListener('submit', function(e) {
-                e.preventDefault(); // ¡PREVENIR EL ENVÍO TRADICIONAL DEL FORMULARIO!
+                e.preventDefault();
 
-                const formData = new FormData(this); // Obtener todos los datos del formulario
+                const formData = new FormData(this);
                 const submitButton = this.querySelector('button[type="submit"]');
 
-                // Deshabilitar botón para evitar múltiples envíos
                 submitButton.disabled = true;
                 submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando...';
 
-                axios.post(this.action, formData) // Envía la solicitud POST por AJAX
+                axios.post(this.action, formData)
                     .then(response => {
                         if (response.data.success) {
-                            showToast(response.data.message, 'success'); // <-- CAMBIO AQUÍ
-                            // Opcional: Actualizar el contador del carrito en el navbar si lo tienes
-                            // let cartCountElement = document.getElementById('cart-count');
-                            // if (cartCountElement) {
-                            //      cartCountElement.textContent = response.data.newCartCount; // Asume que el backend devuelve newCartCount
-                            // }
+                            showToast(response.data.message, 'success');
                         } else {
-                            showToast('Error: ' + response.data.message, 'danger'); // <-- CAMBIO AQUÍ
+                            showToast('Error: ' + response.data.message, 'danger');
                         }
                     })
                     .catch(error => {
@@ -135,57 +226,14 @@
                         if (error.response && error.response.data && error.response.data.message) {
                             errorMessage = error.response.data.message;
                         }
-                        showToast(errorMessage, 'danger'); // <-- CAMBIO AQUÍ
-                    })
-                    .finally(() => {
-                        // Volver a habilitar el botón después de la respuesta
-                        submitButton.disabled = false;
-                        submitButton.innerHTML = '<i class="bi bi-plus"></i>'; // Restaurar icono
-                    });
-            });
-        });
-
-        // Si implementas el formulario en la modal, necesitarás un listener similar para '.add-to-cart-modal-form'
-        /*
-        document.querySelectorAll('.add-to-cart-modal-form').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-                const submitButton = this.querySelector('button[type="submit"]');
-
-                submitButton.disabled = true;
-                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Añadiendo...';
-
-                axios.post(this.action, formData)
-                    .then(response => {
-                        if (response.data.success) {
-                            showToast(response.data.message, 'success');
-                            // Cierra la modal después de añadir al carrito
-                            const modalElement = submitButton.closest('.modal');
-                            if (modalElement) {
-                                const modal = bootstrap.Modal.getInstance(modalElement);
-                                if (modal) modal.hide();
-                            }
-                        } else {
-                            showToast('Error: ' + response.data.message, 'danger');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error al añadir al carrito desde modal:', error);
-                        let errorMessage = 'Hubo un error al procesar tu solicitud.';
-                        if (error.response && error.response.data && error.response.data.message) {
-                            errorMessage = error.response.data.message;
-                        }
                         showToast(errorMessage, 'danger');
                     })
                     .finally(() => {
                         submitButton.disabled = false;
-                        submitButton.innerHTML = 'Añadir al Carrito';
+                        submitButton.innerHTML = '<i class="bi bi-plus"></i>';
                     });
             });
         });
-        */
     });
 </script>
 @endpush
-
