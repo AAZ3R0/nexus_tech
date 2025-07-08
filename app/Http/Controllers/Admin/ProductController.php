@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product; // Importa el modelo Product
 use App\Models\ProductType; // Importa el model ProductType
+use App\Models\CartItem; // ¡Importa el modelo CartItem!
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -94,6 +95,13 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        //Verifica si el producto está en algún carrito
+        $isInCart = CartItem::where('products_id', $product->products_id)->exists();
+
+        if($isInCart){
+            CartItem::where('products_id', $product->products_id)->delete();
+        }
+
         // Implementar la lógica para eliminar la imagen del almacenamiento
         if ($product->img_name && $product->img_name != 'default.png') {
             Storage::delete('public/img/products/' . $product->img_name);

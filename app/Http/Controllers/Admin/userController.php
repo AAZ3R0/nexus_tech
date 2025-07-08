@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Cart;
+use App\Models\CartItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,10 +21,20 @@ class userController extends Controller
         return view('admin.usersTable', compact('users', 'roles', 'carts'));
     }
 
-    public function destroy(User $user, Cart $cart){
+    public function destroy(User $user) // Asumiendo Route Model Binding para User
+    {
+        
+        $userID = $user->user_id;
+        $cart = Cart::firstOrCreate(['user_id' => $userID]);
 
-        $cart->where('user_id', $user->user_id)->delete(); //Borramos el carrito del usuario
-        $user->delete(); //Borramos el usuario
-        return redirect()-> route('admin.users.index')-> with('success', 'Usuario baneado');
+        //elimina todos los items del carrito si es que hay
+        CartItem::where('cart_id', $cart->cart_id)->delete();
+
+        //Borra el carrito asignado para el usuario
+        $cart->delete();
+        //Banea al usuario
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('success', 'Usuario y todos sus carritos e ítems de carrito eliminados con éxito.');
     }
 }
