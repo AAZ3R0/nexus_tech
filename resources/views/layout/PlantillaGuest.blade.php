@@ -36,12 +36,14 @@
                     <li class="nav-item me-2">
                         <a href="#" class="nav-link link-info px-2">Sobre nosotros</a>
                     </li>
+                    @guest
                     <li class="nav-item me-2">
                         <a href="{{ url('/login') }}" class="nav-link link-info px-2">Iniciar session</a>
                     </li>
                     <li class="nav-item me-2">
                         <a href="{{ url('/register') }}" class="nav-link link-info px-2">Registrarse</a>
                     </li>
+                    @endguest
                     
  
                 </ul>

@@ -18,7 +18,7 @@
         <div class="container-fluid">
 
             <!-- Logo del sitio -->
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ url('/controlPanel') }} ">
                 <img src="{{ asset('img/Logo_pagina.png') }}" class="img-fluid" style="max-height: 100px;" alt="Logo">
             </a>
 
@@ -28,10 +28,7 @@
                 <!-- 🔹 Menú de navegación -->
                 <ul class="navbar-nav flex-row me-3 gap-5">
                     <li class="nav-item me-2">
-                        <a href="#" class="nav-link link-info px-2">Inicio</a>
-                    </li>
-                    <li class="nav-item me-2">
-                        <a href="{{ url('/products') }}" class="nav-link link-info px-2">Catálogo</a>
+                        <a href="{{ url('/controlPanel') }} " class="nav-link link-info px-2">Panel de control</a>
                     </li>
                     <li class="nav-item me-2">
                         <a href="#" class="nav-link link-info px-2">Sobre nosotros</a>
@@ -53,15 +50,6 @@
                         <i class="bi bi-search"></i>
                     </button>
                 </form>
-
-                <!-- 🔹 Botón del carrito -->
-                <li class="d-flex align-items-center nav-item">
-                    <a class="nav-link" href="{{ route('user.cart') }}">
-                        <i class="bi bi-cart"></i>
-                        <span class="badge bg-danger rounded-pill" id="cart-count">{{$newCartItemCount ?? 0}}</span>
-                    </a>
-                </li>
-
             </div>
         </div>
     </nav>

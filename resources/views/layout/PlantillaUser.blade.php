@@ -18,7 +18,7 @@
         <div class="container-fluid">
 
             <!-- Logo del sitio -->
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ url('/') }} ">
                 <img src="{{ asset('img/Logo_pagina.png') }}" class="img-fluid" style="max-height: 100px;" alt="Logo">
             </a>
 
@@ -28,13 +28,25 @@
                 <!-- 🔹 Menú de navegación -->
                 <ul class="navbar-nav flex-row me-3 gap-5">
                     <li class="nav-item me-2">
-                        <a href="#" class="nav-link link-info px-2">Inicio</a>
+                        <a href="{{ url('/') }}" class="nav-link link-info px-2">Inicio</a>
                     </li>
                     <li class="nav-item me-2">
                         <a href="{{ url('/products') }}" class="nav-link link-info px-2">Catálogo</a>
                     </li>
                     <li class="nav-item me-2">
                         <a href="#" class="nav-link link-info px-2">Sobre nosotros</a>
+                    </li>
+                    @guest
+                    <li class="nav-item me-2">
+                        <a href="{{ url('/login') }}" class="nav-link link-info px-2">Iniciar sesión</a>
+                    </li>
+                    <li class="nav-item me-2">
+                        <a href="{{ url('/register') }}" class="nav-link link-info px-2">Registrarse</a>
+                    </li>
+                    @endguest
+                    @auth
+                    <li class="nav-item me-2">
+                        <a href="{{ url('/userProfile') }}" class="nav-link link-info px-2">{{ Auth::user()->username }}</a>
                     </li>
                     <li class="nav-item me-5">
                         <form action="{{ route('logout') }}" method="post">
@@ -43,6 +55,7 @@
                         </form>
                         
                     </li>
+                    @endauth
                 </ul>
 
                 <!-- 🔹 Barra de búsqueda -->

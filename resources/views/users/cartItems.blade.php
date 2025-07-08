@@ -1,4 +1,4 @@
-@extends('layout.index')
+@extends('layout.PlantillaUser')
 @section('content')
 
     {{-- Añade un data-product-url aquí para pasar la URL de la página de productos a JS --}}

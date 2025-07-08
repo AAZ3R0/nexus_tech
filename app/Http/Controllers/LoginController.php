@@ -18,7 +18,17 @@ class LoginController extends Controller
         ]);
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()-> intended('/products');
+            
+            //Obtiene el usuario autenticado
+            $user = Auth::user();
+
+            //Validación del rol de la cuenta
+            if ($user->role->name === "Administrador"){
+                return redirect()-> intended('/controlPanel');
+            }else{
+                return redirect()-> intended('/products');
+            }
+            
         }
 
         return back()->withErrors([

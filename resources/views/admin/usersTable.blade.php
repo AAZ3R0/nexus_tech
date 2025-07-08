@@ -1,4 +1,4 @@
-@extends('layout.index')
+@extends('layout.PlantillaAdmin')
 @section('content')
 
 <div class="container">

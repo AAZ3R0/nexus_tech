@@ -1,4 +1,4 @@
-@extends("layout.PlantillaGuest")
+@extends("layout.PlantillaUser")
 @section('content')
 
 <h1 class="text-center my-5">Bienvenido a NexusTech</h1>

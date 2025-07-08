@@ -1,1 +1,6 @@
-<h1>Esto solo lo puede ver el administrador</h1>
+@extends('layout.PlantillaAdmin')
+@section('content')
+
+    <h1>Bienvenido {{Auth::user()->username}}</h1>
+
+@endsection

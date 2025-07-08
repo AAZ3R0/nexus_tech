@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Admin\userController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Users\CartItemsController;
+use App\Http\Controllers\Users\AccountController;
 
 
 
@@ -17,7 +18,7 @@ Route::get('/', function () {
 
 Route::get('/', function () {
     return view('/index');
-})->middleware('guest');
+});
 
 //Registro
 Route::get('/register', [RegisterController::class, "ShowRegisterForm"])
@@ -39,11 +40,14 @@ Route::post('/logout', [LoginController::class, "Logout"])-> name('logout');
 //Páginas protegidas (Usuario)
 
 Route::middleware(['auth', 'role:Usuario'])->group(function() {
-
+    //Productos
     Route::get('/products', [ProductController::class, "ProductUser"])->name('user.product');
     Route::post('/products', [CartItemsController::class, "store"])->name('cart.add-item');
+    //Carrito
     Route::patch('/cart/{cartItem}/update-quantity', [CartItemsController::class, "updateQuantity"])->name('cart.update-item-quantity');
     Route::delete('/UserCart', [CartItemsController::class, "deleteAll"])->name('delete.cart.items');
+    Route::get('/users/{userId}edit', [AccountController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{userId}', [AccountController::class, 'update'])->name('users.update');
 
     Route::resource('/UserCart', CartItemsController::class)->only(['index', 'destroy'])->parameters([
         'UserCart' => 'cartItem',
@@ -51,6 +55,9 @@ Route::middleware(['auth', 'role:Usuario'])->group(function() {
         'index' => 'user.cart',
         'destroy' => 'delete.cart.item',
     ]);
+
+    //Perfil
+    Route::get('/userProfile', [AccountController::class, "show"])->name('user.profile');
 });
 
 

@@ -1,4 +1,4 @@
-@extends("layout.PlantillaGuest")
+@extends("layout.PlantillaUser")
 @section('content')
 
 <div class="container-fluid d-flex bg-primary justify-content-center align-items-center" style="min-height: 100vh;">
