@@ -36,7 +36,7 @@
                         <a href="{{ url('/products') }}" class="nav-link link-info px-2">Catálogo</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a href="#" class="nav-link link-info px-2">Sobre nosotros</a>
+                        <a href="{{ url('/aboutus') }}" class="nav-link link-info px-2">Sobre nosotros</a>
                     </li>
                     @guest
                     <li class="nav-item me-2">

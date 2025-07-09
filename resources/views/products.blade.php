@@ -1,57 +1,67 @@
 @extends('layout.PlantillaUser')
 @section('content')
 
-<div class="container m-auto">
+<div class="container-fluid p-5 bg-primary justify-content-center align-items-center" style="min-height: 100vh;">
+<div class="container m-auto rounded text-white p-5" style="background-color: #1E2A30;">
     <h1>Lista de productos @if(request('query')) para "{{ request('query') }}" @endif</h1>
 
-    ---
 
-    {{-- Controles de Filtro --}}
-    <form action="{{ route('user.product') }}" method="GET" class="mb-4" id="filterForm">
-        {{-- Mantener el término de búsqueda si existe --}}
-        <input type="hidden" name="query" value="{{ request('query') }}">
+{{-- Bloque de filtros --}}
+<div>
+  <form action="{{ route('user.product') }}" method="GET" id="filterForm" class="text-white">
+    <input type="hidden" name="query" value="{{ request('query') }}">
 
-        <div class="row g-3 align-items-end">
-            {{-- Filtro por Tipo de Producto --}}
-            <div class="col-md-3">
-                <label for="product_type" class="form-label">Filtrar por Tipo</label>
-                <select class="form-select" id="product_type" name="product_type_id">
-                    <option value="">Todos los Tipos</option>
-                    @foreach($productTypes as $type)
-                        <option value="{{ $type->product_type_id }}" {{ request('product_type_id') == $type->product_type_id ? 'selected' : '' }}>
-                            {{ $type->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+    <div class="row gx-3 gy-3 align-items-end">
+      {{-- Tipo de producto --}}
+      <div class="col-12 col-md-4 col-lg-4">
+        <label for="product_type" class="form-label">Filtrar por Tipo</label>
+        <select class="form-select" id="product_type" name="product_type_id">
+          <option value="">Todos los Tipos</option>
+          @foreach($productTypes as $type)
+            <option value="{{ $type->product_type_id }}"
+              {{ request('product_type_id') == $type->product_type_id ? 'selected' : '' }}>
+              {{ $type->name }}
+            </option>
+          @endforeach
+        </select>
+      </div>
 
-            {{-- Ordenar por Nombre --}}
-            <div class="col-md-3">
-                <label for="sort_by_name" class="form-label">Ordenar por Nombre</label>
-                <select class="form-select" id="sort_by_name" name="sort_by_name">
-                    <option value="">Sin Orden</option>
-                    <option value="asc" {{ request('sort_by_name') == 'asc' ? 'selected' : '' }}>A-Z (Ascendente)</option>
-                    <option value="desc" {{ request('sort_by_name') == 'desc' ? 'selected' : '' }}>Z-A (Descendente)</option>
-                </select>
-            </div>
+      {{-- Ordenar por nombre --}}
+      <div class="col-10 col-md-3 col-lg-2 ms-3">
+        <label for="sort_by_name" class="form-label">Ordenar por Nombre</label>
+        <select class="form-select" id="sort_by_name" name="sort_by_name">
+          <option value="">Sin Orden</option>
+          <option value="asc"  {{ request('sort_by_name') == 'asc'  ? 'selected' : '' }}>A-Z (Asc.)</option>
+          <option value="desc" {{ request('sort_by_name') == 'desc' ? 'selected' : '' }}>Z-A (Desc.)</option>
+        </select>
+      </div>
 
-            {{-- Filtro por Rango de Precio (noUiSlider) --}}
-            <div class="col-md-4">
-                <label class="form-label">Rango de Precio: $<span id="minPriceDisplay">0</span> - $<span id="maxPriceDisplay">Máx</span></label>
-                <div id="price-slider"></div> {{-- Contenedor del noUiSlider --}}
-                
-                {{-- Campos ocultos para enviar los valores del slider --}}
-                <input type="hidden" name="min_price" id="hidden_min_price" value="{{ request('min_price', 0) }}">
-                <input type="hidden" name="max_price" id="hidden_max_price" value="{{ request('max_price', $maxProductPrice) }}">
-            </div>
-
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Aplicar</button>
-            </div>
+      {{-- Rango de precio --}}
+      <div class="col-12 col-md-4 col-lg-4 ms-5">
+        <label class="form-label">
+        <div class="ms-5">
+           <h5  >Rango de Precio:</h5>  
         </div>
-    </form>
+         
+          <span class="ms-5">$</span><span class="ms-" id="minPriceDisplay">0</span> – $<span id="maxPriceDisplay">Máx</span>
+        </label>
+        <div id="price-slider"></div>
 
-    ---
+        <input type="hidden" name="min_price" id="hidden_min_price"
+               value="{{ request('min_price', 0) }}">
+        <input type="hidden" name="max_price" id="hidden_max_price"
+               value="{{ request('max_price', $maxProductPrice) }}">
+      </div>
+
+  
+    </div>
+        {{-- Botón --}}
+      <div class=" justify-content-end align-items-center text-end">
+        <button type="submit" class="btn btn-primary">Aplicar</button>
+      </div>
+  </form>
+</div>
+
 
     @if($products->isEmpty() && request('query'))
         <div class="alert alert-warning" role="alert">
@@ -62,7 +72,9 @@
             No hay productos disponibles en este momento que coincidan con tus filtros.
         </div>
     @endif
-
+</div>
+<div class="container m-auto rounded p-5 mt-5 text-white" style="background-color: #1E2A30;">
+    <h2 class="text-white">Productos</h2>
     <div class="row">
         @foreach($products as $product)
         <div class="card m-3 p-0" style="width: 18rem;">
@@ -113,6 +125,7 @@
 
         @endforeach
     </div>
+</div>
 </div>
 
 @endsection
