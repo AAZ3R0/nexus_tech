@@ -7,7 +7,7 @@
 
       <!-- Imagen (1/3) -->
       <div class="col-12 col-md-4">
-        <img src="https://via.placeholder.com/400x450?text=Nexus+Tech"  <!-- pon aquí tu imagen -->
+        <img src="{{asset('/img/logo_pagina.png')}}"
              class="img-fluid rounded w-100"
              alt="Nexus Tech">
       </div>

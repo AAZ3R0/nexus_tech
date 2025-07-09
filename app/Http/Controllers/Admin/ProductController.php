@@ -19,6 +19,12 @@ class ProductController extends Controller
         return view('admin.productsTable', compact('products', 'productTypes'));
     }
 
+    public function RandomProductOrder(){
+        $randProducts = Product::inRandomOrder()->take(4)->get();
+        $productTypes = ProductType::all();
+        return view('index', compact('randProducts', 'productTypes'));
+    }
+
     public function ProductUser(Request $request)
     {
         // 1. Obtener el término de búsqueda de la URL (para la barra de búsqueda)

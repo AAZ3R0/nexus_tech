@@ -16,9 +16,7 @@ Route::get('/', function () {
 });
 */
 
-Route::get('/', function () {
-    return view('/index');
-});
+Route::get('/', [ProductController::class, "RandomProductOrder"])-> name('index');
 
 //Registro
 Route::get('/register', [RegisterController::class, "ShowRegisterForm"])
@@ -36,6 +34,11 @@ Route::post('/login', [LoginController::class, "Login"])
 
 //Logout
 Route::post('/logout', [LoginController::class, "Logout"])-> name('logout');
+
+//About us
+Route::get('/aboutus', function(){
+    return view('/aboutus');
+});
 
 //Páginas protegidas (Usuario)
 
