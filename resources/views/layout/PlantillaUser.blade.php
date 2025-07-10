@@ -12,127 +12,89 @@
     <title>nexus_tech</title>
 </head>
 
-<body class="d-flex flex-column min-vh-100">
-    
-    @stack('scripts')
-    <!-- 🔷 NAVBAR: barra superior de navegación -->
-    <nav class=" text-white py-3 navbar navbar-expand-lg" style= "background-color: #111B1F;">
-        <div class="container-fluid">
+@stack('scripts')
 
-            <!-- Logo del sitio -->
-            <a class="navbar-brand" href="{{ url('/') }} ">
-                <img src="{{ asset('img/Logo_pagina.png') }}" class="img-fluid" style="max-height: 100px;" alt="Logo">
-            </a>
+<!-- 🔷 NAVBAR: barra superior de navegación -->
+<nav class="bg-secondary d-flex py-3 navbar navbar-expand-lg">
+    <div class="container-fluid">
 
-            <!-- Menú, búsqueda y carrito -->
-            <div class="d-flex me-5 align-items-center">
+        <!-- Logo del sitio -->
+        <a class="navbar-brand" href="{{ url('/') }} ">
+            <img src="{{ asset('img/Logo_pagina.png') }}" class="img-fluid" style="max-height: 100px;" alt="Logo">
+        </a>
 
-                <!-- 🔹 Menú de navegación -->
-                <ul class="navbar-nav flex-row me-3 gap-5">
-                    <li class="nav-item me-2">
-                        <a href="{{ url('/') }}" class="nav-link link-info px-2">Inicio</a>
-                    </li>
-                    <li class="nav-item me-2">
-                        <a href="{{ url('/products') }}" class="nav-link link-info px-2">Catálogo</a>
-                    </li>
-                    <li class="nav-item me-2">
-                        <a href="{{ url('/aboutus') }}" class="nav-link link-info px-2">Sobre nosotros</a>
-                    </li>
-                    @guest
-                    <li class="nav-item me-2">
-                        <a href="{{ url('/login') }}" class="nav-link link-info px-2">Iniciar sesión</a>
-                    </li>
-                    <li class="nav-item me-2">
-                        <a href="{{ url('/register') }}" class="nav-link link-info px-2">Registrarse</a>
-                    </li>
-                    @endguest
-                    @auth
-                    <li class="nav-item me-2">
-                        <a href="{{ url('/userProfile') }}" class="nav-link link-info px-2">{{ Auth::user()->username }}</a>
-                    </li>
-                    <li class="nav-item me-5">
-                        <form action="{{ route('logout') }}" method="post">
-                            @csrf
-                            <button type="submit" class="nav-link link-danger px-2">Cerrar sesión</button>
-                        </form>
-                        
-                    </li>
-                    @endauth
-                </ul>
+        <!-- Menú, búsqueda y carrito -->
+        <div class="d-flex row">
+
+            <!-- 🔹 Menú de navegación -->
+            <ul class="col navbar-nav flex-row me-5 gap-5 input-group">
+                <li class="nav-item">
+                    <a href="{{ url('/') }}" class="nav-link link-info px-2">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('/products') }}" class="nav-link link-info px-2">Catálogo</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('/aboutus') }}" class="nav-link link-info px-2">Sobre nosotros</a>
+                </li>
+                @guest
+                <li class="nav-item">
+                    <a href="{{ url('/login') }}" class="nav-link link-info px-2">Iniciar sesión</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('/register') }}" class="nav-link link-info px-2">Registrarse</a>
+                </li>
+                @endguest
+                @auth
+                <li class="nav-item">
+                    <a href="{{ url('/userProfile') }}" class="nav-link link-info px-2">{{ Auth::user()->username }}</a>
+                </li>
+                <li class="nav-item">
+                    <form action="{{ route('logout') }}" method="post">
+                        @csrf
+                        <button type="submit" class="nav-link link-danger px-2"><p class="h5">Cerrar sesión</p></button>
+                    </form>
+                    
+                </li>
+                @endauth
 
                 <!-- 🔹 Barra de búsqueda -->
-                <form class="d-flex align-items-center me-3" role="search" style="position: relative; max-width: 500px;" action="{{ route('products.search') }}" method="GET">
-                    <input class="form-control" type="search" placeholder="Buscar" aria-label="Search" name="query" value="{{ request('query') }}" style="padding-right: 100px;">
-                    <button class="btn btn-outline-success position-absolute" type="submit"
-                            style="top: 0; right: 0; height: 100%; border-top-left-radius: 0; border-bottom-left-radius: 0;">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </form>
+                 <li class="nav-item rounded bg-dark ">
+                    <form class="d-flex align-items-center" role="search" action="{{ route('products.search') }}" method="GET">
+                        <input class="form-control form-control-lg  rounded border-primary" type="search" placeholder="Buscar" aria-label="Search" name="query" value="{{ request('query') }}">
+                        
+                        <button class="btn btn-lg" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                        
+                    </form>
+                 </li>
+                
 
                 <!-- 🔹 Botón del carrito -->
-                <li class="d-flex align-items-center nav-item">
-                    <a class="nav-link" href="{{ route('user.cart') }}">
+                <li class="nav-item d-flex align-items-center">
+                    <a class="btn btn-lg btn-outline-accent3 rounded" href="{{ route('user.cart') }}">
                         <i class="bi bi-cart"></i>
-                        <span class="badge bg-danger rounded-pill" id="cart-count">{{$newCartItemCount ?? 0}}</span>
                     </a>
                 </li>
-
-            </div>
+                
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
+
+<body class="d-flex flex-column bg-primary min-vh-100" data-bs-theme="dark">
+    
+<div class="py-5">
     <!-- 🔻 Contenido dinámico (Blade) -->
     @yield('content')
+    
+</div>
 
-    <!-- 🔸 FOOTER: pie de página fijo -->
-    <footer class="footer d-flex text-light  mt-auto" style="background-color: #111B1F;">
-        <div class="container-fluid py-3 mx-5">
-            <div class="row align-items-center text-center text-md-start justify-content-between">
-                
-                <!-- 🔹 Columna 1: Texto informativo de la empresa -->
-                <div class="col-md-4 mb-2 mb-md-0">
-                    <small>
-                        <p class="mb-1 fw-bold">✨En NexusTech, ¡te ofrecemos los mejores proveedores! ✨</p>
-                        <ul class="list-unstyled mb-0">
-                            <li>Componentes y piezas de equipos de cómputo.</li>
-                            <li>Productos tecnológicos de calidad.</li>
-                        </ul>
-                    </small>
-                </div>
+    
 
-                <!-- 🔹 Columna 2: Logo centrado -->
-                <div class="col-md-2 mb-2 mb-md-0 text-center">
-                    <a class="navbar-brand" href="#">
-                        <img src="{{ asset('img/Logo_pagina.png') }}" class="img-fluid" style="max-height: 100px;" alt="Logo">
-                    </a>
-                </div>
-
-                <!-- 🔹 Columna 3: Información de contacto y redes sociales -->
-                <div class="col-md-4 mb-2 mb-md-0">
-                    <div class="row">
-                        <!-- Contacto -->
-                        <div class="col-md-6">
-                            <p class="mb-1 fw-bold">Contáctanos</p>
-                            <p class="mb-0"><i class="bi bi-envelope"></i> contacto@nexus.com</p>
-                            <p class="mb-0"><i class="bi bi-telephone"></i> +52 656 123 4567</p>
-                        </div>
-
-                        <!-- Redes sociales -->
-                        <div class="col-md text-md-end">
-                            <p class="mb-1">Nuestras redes sociales</p>
-                            <a href="https://facebook.com" target="_blank" class="btn btn-outline-light btn-sm me-2">
-                                <i class="bi bi-facebook"></i>
-                            </a>
-                            <a href="https://instagram.com" target="_blank" class="btn btn-outline-light btn-sm">
-                                <i class="bi bi-instagram"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </footer>
+    
 
     {{-- Contenedor para las notificaciones Toast (normalmente en layout.index) --}}
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
@@ -152,6 +114,56 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 </body>
+
+<!-- 🔸 FOOTER: pie de página fijo -->
+<footer class="footer d-flex text-light mt-auto bg-secondary">
+    <div class="container-fluid py-3 mx-5">
+        <div class="row align-items-center text-center text-md-start justify-content-between m-auto">
+            
+            <!-- 🔹 Columna 1: Texto informativo de la empresa -->
+            <div class="col-md-4 mb-2 mb-md-0">
+                <small>
+                    <p class="mb-1 fw-bold">✨En NexusTech, ¡te ofrecemos los mejores proveedores! ✨</p>
+                    <ul class="list-unstyled mb-0">
+                        <li>Componentes y piezas de equipos de cómputo.</li>
+                        <li>Productos tecnológicos de calidad.</li>
+                    </ul>
+                </small>
+            </div>
+
+            <!-- 🔹 Columna 2: Logo centrado -->
+            <div class="col-md-2">
+                <a class="navbar-brand" href="#">
+                    <img src="{{ asset('img/Logo_pagina.png') }}" class="img-fluid mh-100 px-5">
+                </a>
+            </div>
+
+            <!-- 🔹 Columna 3: Información de contacto y redes sociales -->
+            <div class="col-md-4 mb-2 mb-md-0">
+                <div class="row">
+                    <!-- Contacto -->
+                    <div class="col-md-6">
+                        <p class="mb-1 fw-bold">Contáctanos</p>
+                        <p class="mb-0"><i class="bi bi-envelope"></i> contacto@nexus.com</p>
+                        <p class="mb-0"><i class="bi bi-telephone"></i> +52 656 123 4567</p>
+                    </div>
+
+                    <!-- Redes sociales -->
+                    <div class="col-md text-md-end">
+                        <p class="mb-1">Nuestras redes sociales</p>
+                        <a href="https://facebook.com" target="_blank" class="btn btn-outline-light btn-sm me-2">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</footer>
 
 
 </html>

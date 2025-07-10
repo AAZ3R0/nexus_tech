@@ -1,8 +1,8 @@
 @extends('layout.PlantillaUser') {{-- Asume que tienes un layout principal llamado app.blade.php --}}
 
 @section('content')
-<div class="container-fluid p-5 d-flex bg-primary justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="card p-5 text-white" style="background-color:#1E2A30;">
+
+    <div class="container bg-accent1 card p-5 text-white">
   <h1>Editar Perfil de {{ $user->name }} {{ $user->last_name }}</h1>
 
   @if (session('success'))
@@ -107,8 +107,5 @@
 </div>
 
   </div>
-</div>
-
-
 </div>
 @endsection

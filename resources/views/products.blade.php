@@ -1,9 +1,9 @@
 @extends('layout.PlantillaUser')
 @section('content')
 
-<div class="container-fluid p-5 bg-primary justify-content-center align-items-center" style="min-height: 100vh;">
-<div class="container m-auto rounded text-white p-5" style="background-color: #1E2A30;">
-    <h1>Lista de productos @if(request('query')) para "{{ request('query') }}" @endif</h1>
+
+<div class="container bg-accent1 m-auto rounded text-white p-5">
+    <h3>Filtro de búsqueda @if(request('query')) para "{{ request('query') }}" @endif</h3>
 
 
 {{-- Bloque de filtros --}}
@@ -11,11 +11,11 @@
   <form action="{{ route('user.product') }}" method="GET" id="filterForm" class="text-white">
     <input type="hidden" name="query" value="{{ request('query') }}">
 
-    <div class="row gx-3 gy-3 align-items-end">
+    <div class="row align-items-end">
       {{-- Tipo de producto --}}
-      <div class="col-12 col-md-4 col-lg-4">
-        <label for="product_type" class="form-label">Filtrar por Tipo</label>
-        <select class="form-select" id="product_type" name="product_type_id">
+      <div class="col col-md-4 col-lg-4">
+        <label for="product_type" class="form-label">Por Tipo</label>
+        <select class="form-select bg-primary border-primary" id="product_type" name="product_type_id">
           <option value="">Todos los Tipos</option>
           @foreach($productTypes as $type)
             <option value="{{ $type->product_type_id }}"
@@ -27,9 +27,9 @@
       </div>
 
       {{-- Ordenar por nombre --}}
-      <div class="col-10 col-md-3 col-lg-2 ms-3">
+      <div class="col col-md-4 col-lg-3 " data-bs-theme="dark">
         <label for="sort_by_name" class="form-label">Ordenar por Nombre</label>
-        <select class="form-select" id="sort_by_name" name="sort_by_name">
+        <select class="form-select bg-primary border-primary" id="sort_by_name" name="sort_by_name">
           <option value="">Sin Orden</option>
           <option value="asc"  {{ request('sort_by_name') == 'asc'  ? 'selected' : '' }}>A-Z (Asc.)</option>
           <option value="desc" {{ request('sort_by_name') == 'desc' ? 'selected' : '' }}>Z-A (Desc.)</option>
@@ -37,13 +37,12 @@
       </div>
 
       {{-- Rango de precio --}}
-      <div class="col-12 col-md-4 col-lg-4 ms-5">
-        <label class="form-label">
-        <div class="ms-5">
-           <h5  >Rango de Precio:</h5>  
-        </div>
+      <div class="col col-md-4 col-lg-5 text-center">
+        <label class="form-label ">
+           <h5 >Rango de Precio:</h5>  
+        
          
-          <span class="ms-5">$</span><span class="ms-" id="minPriceDisplay">0</span> – $<span id="maxPriceDisplay">Máx</span>
+          <span>$</span><span class="ms-" id="minPriceDisplay">0</span> – $<span id="maxPriceDisplay">Máx</span>
         </label>
         <div id="price-slider"></div>
 
@@ -52,13 +51,14 @@
         <input type="hidden" name="max_price" id="hidden_max_price"
                value="{{ request('max_price', $maxProductPrice) }}">
       </div>
-
+    
+      {{-- Botón --}}
+      <div class="justify-content-center align-items-center mt-5">
+        <button type="submit" class="btn btn-lg container-fluid rounded btn-accent2">Aplicar</button>
+      </div>
   
     </div>
-        {{-- Botón --}}
-      <div class=" justify-content-end align-items-center text-end">
-        <button type="submit" class="btn btn-primary">Aplicar</button>
-      </div>
+        
   </form>
 </div>
 
@@ -73,59 +73,96 @@
         </div>
     @endif
 </div>
-<div class="container m-auto rounded p-5 mt-5 text-white" style="background-color: #1E2A30;">
-    <h2 class="text-white">Productos</h2>
-    <div class="row">
+<div class="container bg-accent1 rounded text-white p-5 my-5">
+    <h1 class="text-white py-3">Lista de productos</h1>
+    <div class="row py-2 m-auto">
         @foreach($products as $product)
-        <div class="card m-3 p-0" style="width: 18rem;">
+        <div class="card mx-2 my-3 p-0 bg-secondary text-accent3" style="width: 18rem;">
             <img src="{{ asset('img/products/' . $product->img_name) }}" class="card-img-top">
-            <div class="card-body">
+            <div class="card-body text-center">
                 <form class="add-to-cart-form" action="{{ route('cart.add-item') }}" method="POST">
                     <input type="hidden" name="product_id" value="{{ $product->products_id }}">
                     <input type="hidden" name="count" value="1">
                     <h5 class="card-title">{{$product->name}}</h5>
                     <p class="card-text">$ {{ number_format($product->price, 2) }}</p>
-                    <button type="button" class="btn btn-lg rounded-circle btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ShowProduct{{ $product->products_id }}"><i class="bi bi-card-list"></i></button>
+                    <button type="button" class="btn btn-lg rounded btn-outline-info " data-bs-toggle="modal" data-bs-target="#ShowProduct{{ $product->products_id }}"><i class="bi bi-card-list"></i></button>
 
                     @csrf
-                    <button type="submit" class="btn btn-lg rounded-circle btn-outline-success"><i class="bi bi-plus"></i></button>
+                    <button type="submit" class="btn btn-lg rounded btn-outline-success offset-md-4"><i class="bi bi-plus"></i></button>
                 </form>
 
             </div>
         </div>
 
         {{-- Modal SHOW (dentro del bucle) --}}
-        <div class="modal fade" id="ShowProduct{{ $product->products_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Detalles del producto</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $product->name }}</h5>
-                                <p class="card-text"><strong>ID:</strong> {{ $product->products_id }}</p>
-                                <p class="card-text"><strong>Tipo de Producto:</strong> {{ $product->product_type->name ?? 'N/A' }}</p>
-                                <p class="card-text"><strong>Descripción:</strong> {{ $product->description }}</p>
-                                <p class="card-text"><strong>Precio:</strong> ${{ number_format($product->price, 2) }}</p>
-                                <p class="card-text"><strong>Stock:</strong> {{ $product->stock }}</p>
-                                <p class="card-text"><strong>Imagen:</strong></p>
-                                <img src="{{ asset('img/products/' . $product->img_name) }}" style="max-width: 150px; height: auto;">
+            <div class="modal fade" id="ShowProduct{{ $product->products_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content p-3 bg-accent1 text-white border border-accent1">
+                        <div class="modal-header border border border-accent1">
+                            <h3 class="modal-title" id="exampleModalLabel">Detalles de la pieza</h3>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body border border-accent1">
+                            <div class="card bg-secondary text-white p-3">
+                                <div class="card-body row container-fluid">
+
+                                    <div class="col">
+                                        <img class="img-fluid rounded" src="{{ asset('img/products/' . $product->img_name) }}" style="height: auto;">
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">No. de producto:</label>
+                                            <input type="text" class="form-control" id="name" name="name" value="{{ $product->products_id }}" disabled required>
+                                            @error('name') <div class="text-danger">{{ $message }}</div> @enderror
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Nombre:</label>
+                                            <input type="text" class="form-control" id="name" name="name" value="{{ $product->name }}" disabled required>
+                                            @error('name') <div class="text-danger">{{ $message }}</div> @enderror
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Tipo:</label>
+                                            <input type="text" class="form-control" id="name" name="name" value="{{ $product->product_type->name ?? 'N/A' }}" disabled required>
+                                            @error('name') <div class="text-danger">{{ $message }}</div> @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Descripción:</label>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" disabled>{{ $product->description }}</textarea>
+                                            @error('name') <div class="text-danger">{{ $message }}</div> @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Precio:</label>
+                                            <input type="text" class="form-control" id="name" name="name" value="$ {{ number_format($product->price, 2) }}" disabled required>
+                                            @error('name') <div class="text-danger">{{ $message }}</div> @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Stock:</label>
+                                            <input type="text" class="form-control" id="name" name="name" value="{{ $product->stock }}" disabled required>
+                                            @error('name') <div class="text-danger">{{ $message }}</div> @enderror
+                                        </div>
+                                    </div>
+                                    
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
+                        <div class="modal-footer border border-accent1">
+                            <button type="button" class="btn btn-lg btn-secondary rounded-pill" data-bs-dismiss="modal">Regresar</button>
+                            <form class="add-to-cart-form" action="{{ route('cart.add-item') }}" method="POST">
+                                <input type="hidden" name="product_id" value="{{ $product->products_id }}">
+                                <input type="hidden" name="count" value="1">
+                                @csrf
+                                <button type="submit" class="btn btn-lg rounded-pill btn-outline-success"><i class="bi bi-plus"></i>Añadir al carrito</button>
+                            </form>
+                            
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
         @endforeach
     </div>
-</div>
 </div>
 
 @endsection

@@ -5,7 +5,7 @@
     <div class="container" id="cart-container" data-product-url="{{ route('user.product') }}">
         <h1>Lista del carrito</h1>
 
-        <div class="bg-dark text-light p-5 m-5 rounded" id="cart-items-wrapper"> {{-- ID para el contenedor de los items --}}
+        <div class="text-light p-5 m-5 bg-accent1 rounded" id="cart-items-wrapper"> {{-- ID para el contenedor de los items --}}
             @php
                 $subtotalGeneral = 0;
             @endphp

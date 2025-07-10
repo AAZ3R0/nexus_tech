@@ -36,7 +36,7 @@ class AccountController extends Controller
             'phone_number' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
             'profile_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Para la imagen de perfil
-            'password' => 'nullable|string|min:8|confirmed', // 'confirmed' requiere un campo 'password_confirmation'
+            'password' => 'nullable|string|min:6|confirmed', // 'confirmed' requiere un campo 'password_confirmation'
         ];
 
         // Valida los datos de la solicitud
