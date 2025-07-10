@@ -57,6 +57,25 @@
                 </div>
             </div>
 
+            
+
+            @empty
+                <div id="empty-cart-message" class="text-center p-5">
+                    <p class="lead">Tu carrito está vacío. ¡Añade algunos productos!</p>
+                    {{-- El href será actualizado por JavaScript al cargar la página o al vaciarse el carrito --}}
+                    <a href="#" class="btn btn-primary" id="go-to-products-btn">Ver Productos</a>
+                </div>
+            @endforelse
+
+            
+            {{-- El display de este div se controla con JS --}}
+            <div id="cart-summary" @if($CartItems->isEmpty()) style="display:none;" @endif>
+                <h4>El pedido se enviará a la siguiente dirección: <strong>{{ Auth::user()->address}}</strong> </h4>
+                <p>Total de productos: <span id="total-products-count">{{ $CartItems->sum('count') }}</span></p>
+                <h3>Total a pagar: $ <span id="total-to-pay">{{ number_format($subtotalGeneral, 2) }}</span></h3>
+            </div>
+
+            @if($CartItems->IsNotEmpty())
             <div class="row m-auto my-5 ">
                 <a href="{{url('/products')}}" class="col col-md-2 btn btn-lg btn-primary d-flex justify-content-start rounded">Regresar al listado</a>
                 {{-- El display de este formulario se controla con JS --}}
@@ -67,23 +86,7 @@
                     <button type="submit" class="btn btn-lg btn-outline-success rounded">Realizar compra</button>
                 </form>
             </div>
-
-            @empty
-                <div id="empty-cart-message" class="text-center p-5">
-                    <p class="lead">Tu carrito está vacío. ¡Añade algunos productos!</p>
-                    {{-- El href será actualizado por JavaScript al cargar la página o al vaciarse el carrito --}}
-                    <a href="#" class="btn btn-primary" id="go-to-products-btn">Ver Productos</a>
-                </div>
-            @endforelse
-
-            {{-- El display de este div se controla con JS --}}
-            <div id="cart-summary" @if($CartItems->isEmpty()) style="display:none;" @endif>
-                <h4>El pedido se enviará a la siguiente dirección: <strong>{{ Auth::user()->address}}</strong> </h4>
-                <p>Total de productos: <span id="total-products-count">{{ $CartItems->sum('count') }}</span></p>
-                <h3>Total a pagar: $ <span id="total-to-pay">{{ number_format($subtotalGeneral, 2) }}</span></h3>
-            </div>
-
-            
+            @endif
             
 
         </div>

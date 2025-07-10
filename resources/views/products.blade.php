@@ -148,7 +148,7 @@
                             </div>
                         </div>
                         <div class="modal-footer border border-accent1">
-                            <button type="button" class="btn btn-lg btn-secondary rounded-pill" data-bs-dismiss="modal">Regresar</button>
+                            <button type="button" class="btn btn-lg btn-primary rounded-pill" data-bs-dismiss="modal">Regresar</button>
                             <form class="add-to-cart-form" action="{{ route('cart.add-item') }}" method="POST">
                                 <input type="hidden" name="product_id" value="{{ $product->products_id }}">
                                 <input type="hidden" name="count" value="1">
