@@ -1,6 +1,11 @@
 @extends('layout.PlantillaAdmin')
 @section('content')
-
+<div class="container-fluid bg-primary  flex-column justify-content-center align-items-center" style="min-height: 100vh;">
+<br>
+<br>
+<br>
+<div class ="container card text-white p-5" style="background-color: #1E2A30;">
+    
 <div class="container">
     <h2>Listada de usuarios registrados</h2><br>
 
@@ -10,8 +15,9 @@
         </div>
     @endif
 
-    <table class="table">
-        <thead>
+<div class="rounded overflow-hidden">
+    <table class="table card-table table-striped table-bordered mb-0 bg-primary text-white" style="background-color: #1E2A30;">
+        <thead class ="bg-primary text-white">
             <tr>
                 <th>ID</th>
                 <th>Nombre(s)</th>
@@ -106,12 +112,14 @@
                     </div>
                 </div>
                 
+                
             @endforeach
         </tbody>
     </table>
-
+</div>
     {{ $users->links('vendor.pagination.bootstrap-5') }}
 </div>
-
+</div>
+</div>
 
 @endsection

@@ -1,15 +1,14 @@
 @extends("layout.PlantillaUser")
 @section('content')
 
- <div class="container py-5">
+<div class="container-fluid bg-primary justify-content-center align-items-center" style="min-height: 100vh;">
+  <div class="container py-5">
     <!-- Un solo div que contiene todo lo solicitado -->
-    <div class="row g-4 align-items-center bg-white shadow rounded p-4">
+    <div class="row g-4 align-items-center text-white rounded p-4 mt-5" style="background-color: #1E2A30;">
 
       <!-- Imagen (1/3) -->
       <div class="col-12 col-md-4">
-        <img src="{{asset('/img/logo_pagina.png')}}"
-             class="img-fluid rounded w-100"
-             alt="Nexus Tech">
+        <img src="{{asset('/img/logo_pagina.png')}}" class="img-fluid rounded w-100" alt="Nexus Tech">
       </div>
 
       <!-- Párrafo principal (2/3) -->
@@ -32,6 +31,24 @@
         </p>
       </div>
 
+      <!-- NUEVA SECCIÓN: 3 IMÁGENES EN COLUMNAS -->
+      <div class="col-12">
+        <div class="row text-center">
+          <div class="col-12 col-md-4 mb-3">
+            <img src="{{asset('/img/aboutus/1.jpg')}}" class="img-fluid rounded w-100" alt="Imagen 1">
+          </div>
+          <div class="col-12 col-md-4 mb-3">
+            <img src="{{asset('/img/aboutus/2.png')}}" class="img-fluid rounded w-100" alt="Imagen 2">
+          </div>
+          <div class="col-12 col-md-4 mb-3">
+            <img src="{{asset('/img/aboutus/3.jpg')}}" class="img-fluid rounded w-100" alt="Imagen 3">
+          </div>
+        </div>
+      </div>
+      <!-- FIN DE NUEVA SECCIÓN -->
+
     </div>
   </div>
+</div>
+
 @endsection
