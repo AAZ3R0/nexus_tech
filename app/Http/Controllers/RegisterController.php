@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage; //Permite subir imagenes en la carpeta pública
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class RegisterController extends Controller
 {
@@ -25,11 +26,13 @@ class RegisterController extends Controller
             'profile_img_name' => 'nullable|image|mimes:jpg,jpeg,png|max:2040',
         ]);
 
+        $filename = 'default.png'; //Archivo por defecto si no ponen su perfil
+
         //Subir foto de perfil
         if($request->hasFile('profile_img_name')){
             $file = $request->file('profile_img_name');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/img/users', $filename);
+            $file->move(public_path('img/users'), $filename);
         }else{
             $filename = 'default.png'; //Archivo por defecto si no ponen su perfil
         }

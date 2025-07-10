@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="container bg-accent1 card p-5 text-white">
-  <h1>Editar Perfil de {{ $user->name }} {{ $user->last_name }}</h1>
+  <h1>Editar Perfil de: {{ $user->username }}</h1>
 
   @if (session('success'))
     <div class="alert alert-success text-white">        {{-- texto blanco --}}
@@ -38,13 +38,14 @@
 
           <div class="mb-3 text-start">
             <label for="profile_img" class="form-label">Imagen de Perfil:</label>
-            <input type="file" class="form-control" id="profile_img" name="profile_img">
+            <input type="file" class="form-control border-0" id="profile_img" name="profile_img">
             <small class="form-text text-white-50">
               Deja en blanco para mantener la imagen actual.
             </small>
           </div>
 
-          <button type="submit" class="btn btn-primary w-100">
+          <button type="submit" class="btn btn-outline-warning w-100">
+            <i class="bi bi-pencil-square"></i>
             Actualizar Perfil
           </button>
         </div>
@@ -53,42 +54,42 @@
         <div class="col-12 col-md-8">
           <div class="mb-3">
             <label for="name" class="form-label">Nombre:</label>
-            <input type="text" class="form-control" id="name" name="name"
+            <input type="text" class="form-control border-0" id="name" name="name"
                    value="{{ old('name', $user->name) }}" required>
           </div>
 
           <div class="mb-3">
             <label for="last_name" class="form-label">Apellido:</label>
-            <input type="text" class="form-control" id="last_name" name="last_name"
+            <input type="text" class="form-control border-0" id="last_name" name="last_name"
                    value="{{ old('last_name', $user->last_name) }}" required>
           </div>
 
           <div class="mb-3">
             <label for="username" class="form-label">Nombre de Usuario:</label>
-            <input type="text" class="form-control" id="username" name="username"
+            <input type="text" class="form-control border-0" id="username" name="username"
                    value="{{ old('username', $user->username) }}" required>
           </div>
 
           <div class="mb-3">
             <label for="email" class="form-label">Correo Electrónico:</label>
-            <input type="email" class="form-control" id="email" name="email"
+            <input type="email" class="form-control border-0" id="email" name="email"
                    value="{{ old('email', $user->email) }}" required>
           </div>
 
           <div class="mb-3">
             <label for="phone_number" class="form-label">Número de Teléfono:</label>
-            <input type="text" class="form-control" id="phone_number" name="phone_number"
+            <input type="text" class="form-control border-0" id="phone_number" name="phone_number"
                    value="{{ old('phone_number', $user->phone_number) }}">
           </div>
 
           <div class="mb-3">
             <label for="address" class="form-label">Dirección:</label>
-            <textarea class="form-control" id="address" name="address" rows="2">{{ old('address', $user->address) }}</textarea>
+            <textarea class="form-control border-0" id="address" name="address" rows="2">{{ old('address', $user->address) }}</textarea>
           </div>
 
           <div class="mb-3">
-            <label for="password" class="form-label">Nueva Contraseña:</label>
-            <input type="password" class="form-control" id="password" name="password">
+            <label for="password" class="form-label border-0">Nueva Contraseña:</label>
+            <input type="password" class="form-control border-0" id="password" name="password">
             <small class="form-text text-white-50">
               Deja en blanco para mantener la contraseña actual.
             </small>
@@ -96,7 +97,7 @@
 
           <div class="mb-3">
             <label for="password_confirmation" class="form-label">Confirmar Nueva Contraseña:</label>
-            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
+            <input type="password" class="form-control border-0" id="password_confirmation" name="password_confirmation">
           </div>
         </div>
       </div>

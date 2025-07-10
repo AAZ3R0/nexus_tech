@@ -1,9 +1,9 @@
 @extends("layout.PlantillaUser")
 @section('content')
 
-<div class="container-fluid d-flex bg-primary justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="card p-4 shadow-lg" style="min-width: 320px; max-width: 600px; width: 100%; background-color: #1E2A30; color: white;">
-        <h2 class="text-center mb-4 text-white">Login</h2>
+<div class="container-fluid d-flex justify-content-center align-items-center">
+    <div class="card bg-accent1 p-4 shadow-lg w-25 position-absolute top-50 start-50 translate-middle">
+        <h2 class="text-center mb-4">Login</h2>
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -19,11 +19,11 @@
             @csrf
 
             <div class="mb-3">
-                <input type="text" name="username" class="form-control bg-light text-white border-0" placeholder="Usuario" value="{{ old('username') }}">
+                <input type="text" name="username" class="form-control border-0" placeholder="Usuario" value="{{ old('username') }}">
             </div>
 
             <div class="mb-3">
-                <input type="password" name="password" class="form-control bg-light text-white border-0" placeholder="Contraseña">
+                <input type="password" name="password" class="form-control  border-0" placeholder="Contraseña">
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>

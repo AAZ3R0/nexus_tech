@@ -77,7 +77,7 @@
     <h1 class="text-white py-3">Lista de productos</h1>
     <div class="row py-2 m-auto">
         @foreach($products as $product)
-        <div class="card mx-2 my-3 p-0 bg-secondary text-accent3" style="width: 18rem;">
+        <div class="card mx-2 my-3 p-0 bg-secondary text-accent3 border-0" style="width: 18rem;">
             <img src="{{ asset('img/products/' . $product->img_name) }}" class="card-img-top">
             <div class="card-body text-center">
                 <form class="add-to-cart-form" action="{{ route('cart.add-item') }}" method="POST">
@@ -97,49 +97,49 @@
         {{-- Modal SHOW (dentro del bucle) --}}
             <div class="modal fade" id="ShowProduct{{ $product->products_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
-                    <div class="modal-content p-3 bg-accent1 text-white border border-accent1">
+                    <div class="modal-content p-3 bg-accent1 border-0">
                         <div class="modal-header border border border-accent1">
                             <h3 class="modal-title" id="exampleModalLabel">Detalles de la pieza</h3>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body border border-accent1">
-                            <div class="card bg-secondary text-white p-3">
+                        <div class="modal-body border-0">
+                            <div class="card bg-secondary border-0 p-3">
                                 <div class="card-body row container-fluid">
 
                                     <div class="col">
-                                        <img class="img-fluid rounded" src="{{ asset('img/products/' . $product->img_name) }}" style="height: auto;">
+                                        <img class="img-fluid rounded border-0" src="{{ asset('img/products/' . $product->img_name) }}" style="height: auto;">
                                     </div>
                                     <div class="col-8">
                                         <div class="mb-3">
                                             <label for="name" class="form-label">No. de producto:</label>
-                                            <input type="text" class="form-control" id="name" name="name" value="{{ $product->products_id }}" disabled required>
+                                            <input type="text" class="form-control border-0" id="name" name="name" value="{{ $product->products_id }}" disabled required>
                                             @error('name') <div class="text-danger">{{ $message }}</div> @enderror
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Nombre:</label>
-                                            <input type="text" class="form-control" id="name" name="name" value="{{ $product->name }}" disabled required>
+                                            <input type="text" class="form-control border-0" id="name" name="name" value="{{ $product->name }}" disabled required>
                                             @error('name') <div class="text-danger">{{ $message }}</div> @enderror
                                         </div>
                                         
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Tipo:</label>
-                                            <input type="text" class="form-control" id="name" name="name" value="{{ $product->product_type->name ?? 'N/A' }}" disabled required>
+                                            <input type="text" class="form-control border-0" id="name" name="name" value="{{ $product->product_type->name ?? 'N/A' }}" disabled required>
                                             @error('name') <div class="text-danger">{{ $message }}</div> @enderror
                                         </div>
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Descripción:</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" disabled>{{ $product->description }}</textarea>
+                                            <textarea class="form-control border-0" id="exampleFormControlTextarea1" rows="3" disabled>{{ $product->description }}</textarea>
                                             @error('name') <div class="text-danger">{{ $message }}</div> @enderror
                                         </div>
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Precio:</label>
-                                            <input type="text" class="form-control" id="name" name="name" value="$ {{ number_format($product->price, 2) }}" disabled required>
+                                            <input type="text" class="form-control border-0" id="name" name="name" value="$ {{ number_format($product->price, 2) }}" disabled required>
                                             @error('name') <div class="text-danger">{{ $message }}</div> @enderror
                                         </div>
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Stock:</label>
-                                            <input type="text" class="form-control" id="name" name="name" value="{{ $product->stock }}" disabled required>
+                                            <input type="text" class="form-control border-0" id="name" name="name" value="{{ $product->stock }}" disabled required>
                                             @error('name') <div class="text-danger">{{ $message }}</div> @enderror
                                         </div>
                                     </div>
@@ -260,7 +260,7 @@
                 const submitButton = this.querySelector('button[type="submit"]');
 
                 submitButton.disabled = true;
-                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando...';
+                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
 
                 axios.post(this.action, formData)
                     .then(response => {
