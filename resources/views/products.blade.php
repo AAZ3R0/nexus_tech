@@ -78,7 +78,7 @@
     <div class="row py-2 m-auto">
         @foreach($products as $product)
         <div class="card mx-2 my-3 p-0 bg-secondary text-accent3 border-0" style="width: 18rem;">
-            <img src="{{ asset('img/products/' . $product->img_name) }}" class="card-img-top">
+            <img src="{{ asset('img/products/' . $product->img_name) }}" class="card-img-top" style="height:17rem">
             <div class="card-body text-center">
                 <form class="add-to-cart-form" action="{{ route('cart.add-item') }}" method="POST">
                     <input type="hidden" name="product_id" value="{{ $product->products_id }}">
@@ -107,7 +107,7 @@
                                 <div class="card-body row container-fluid">
 
                                     <div class="col">
-                                        <img class="img-fluid rounded border-0" src="{{ asset('img/products/' . $product->img_name) }}" style="height: auto;">
+                                        <img class="img-fluid rounded border-0" src="{{ asset('img/products/' . $product->img_name) }}" style="height: 12rem;">
                                     </div>
                                     <div class="col-8">
                                         <div class="mb-3">

@@ -15,7 +15,7 @@
             @forelse($CartItems as $Item)
             <div class="align-middle bg-primary p-5 my-5 row rounded cart-item-row" data-item-id="{{ $Item->id_cart_items }}"> {{-- Añade una clase y el ID del item --}}
                 <div class="col align-self-center">
-                    <img class="img-fluid align-middle" src="{{ asset('img/products/default.png') }}" alt="">
+                    <img class="img-fluid align-middle rounded" src="{{ asset('img/products/' . $Item ->product->img_name) }}" style="width: 15rem">
                 </div>
                 <div class="col align-self-center">
                     <h4>{{$Item -> product-> name ?? 'producto no encontrado'}}</h4>

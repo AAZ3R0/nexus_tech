@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" rel="stylesheet">
     @vite(['resources/js/app.js', 'resources/css/app.css'])
     <title>nexus_tech</title>
@@ -15,7 +23,7 @@
 @stack('scripts')
 
 
-<body class="d-flex flex-column bg-primary min-vh-100 " data-bs-theme="dark">
+<body class="d-flex flex-column bg-primary min-vh-100 " data-bs-theme="dark" style="font-family:montserrat, sans-serif">
     
     <!-- 🔷 NAVBAR: barra superior de navegación -->
     <nav class="bg-secondary d-flex py-3 navbar navbar-expand-lg">
@@ -55,7 +63,7 @@
                     <li class="nav-item">
                         <form action="{{ route('logout') }}" method="post">
                             @csrf
-                            <button type="submit" class="nav-link link-danger px-2"><p class="h5">Cerrar sesión</p></button>
+                            <button type="submit" class="nav-link link-danger px-2">Cerrar sesión</button>
                         </form>
                         
                     </li>
@@ -86,7 +94,7 @@
         </div>
     </nav>
 
-    <main class="py-5 flex-grow-1">
+    <main class="py-5 flex-grow-1" style="font-family:roboto">
         <!-- 🔻 Contenido dinámico (Blade) -->
         @yield('content')
         

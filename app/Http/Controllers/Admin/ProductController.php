@@ -7,15 +7,31 @@ use App\Models\Product; // Importa el modelo Product
 use App\Models\ProductType; // Importa el model ProductType
 use App\Models\CartItem; // ¡Importa el modelo CartItem!
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('product_type')->paginate(10);
+        $query = $request->input('query');
+
+        $products = Product::query();
+
+        if ($query) {
+            $products->where(function ($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%')
+                  ->orWhere('description', 'like', '%' . $query . '%');
+            });
+        }
+
+        // --- CAMBIO AQUÍ: Usar paginate() en lugar de get() ---
+        // Puedes especificar cuántos elementos por página quieres, por ejemplo, 10.
+        // El método ->appends(request()->query()) es crucial para mantener los parámetros de la búsqueda en la URL de paginación.
+        $products = $products->paginate(10)->appends(request()->query());
+
         $productTypes = ProductType::all();
+        
         return view('admin.productsTable', compact('products', 'productTypes'));
     }
 
@@ -103,6 +119,10 @@ class ProductController extends Controller
     {
         return $this->ProductUser($request); // Reutiliza la lógica principal
     }
+
+    public function SearchAdmin(Request $request){
+        return $this->index($request);
+    }
     
 
     public function store(Request $request)
@@ -121,7 +141,10 @@ class ProductController extends Controller
         if($request->hasFile('img_name')){
             $file = $request->file('img_name');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/img/products', $filename);
+            $file->move(public_path('img/products'), $filename);
+        }else{
+
+            $filename = 'default.png';
         }
 
         Product::create([
@@ -137,7 +160,7 @@ class ProductController extends Controller
     }
     public function update(Request $request, Product $product)
     {
-
+        
         $validatedData = $request->validate([
             'name' => 'required|string|max:100',
             'product_type_id' => 'required|exists:product_types,product_type_id',
@@ -149,12 +172,18 @@ class ProductController extends Controller
 
         if ($request->hasFile('img_name')) {
             // Si se sube una nueva imagen, eliminar la antigua (si no es la por defecto)
-            if ($product->img_name && $product->img_name != 'default.png') {
-                Storage::delete('public/img/products/' . $product->img_name);
+            if ($product->img_name && $product->img_name !== 'default.png') {
+                $oldImagePath = public_path('img/products/' . $product->img_name);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+                
             }
+            // Almacena la nueva imagen
             $file = $request->file('img_name');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/img/products', $filename);
+            $filename = time() . '_' . $file->getClientOriginalExtension();
+            $file->move(public_path('img/products'), $filename);
+            $product->img_name = $filename;
             $validatedData['img_name'] = $filename; // Asignar el nuevo nombre de archivo
         } else {
             // Si NO se sube una nueva imagen, usar la imagen existente del producto.
@@ -184,7 +213,10 @@ class ProductController extends Controller
 
         // Implementar la lógica para eliminar la imagen del almacenamiento
         if ($product->img_name && $product->img_name != 'default.png') {
-            Storage::delete('public/img/products/' . $product->img_name);
+            $imagePath = public_path('img/products/' . $product->img_name);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
         }
 
         $product->delete();

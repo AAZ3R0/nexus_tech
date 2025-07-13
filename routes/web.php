@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\userController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Users\CartItemsController;
 use App\Http\Controllers\Users\AccountController;
+use App\Http\Controllers\Admin\AdminAccountController;
+
 
 
 
@@ -53,6 +55,9 @@ Route::middleware(['auth', 'role:Usuario'])->group(function() {
     //Carrito
     Route::patch('/cart/{cartItem}/update-quantity', [CartItemsController::class, "updateQuantity"])->name('cart.update-item-quantity');
     Route::delete('/UserCart', [CartItemsController::class, "deleteAll"])->name('delete.cart.items');
+    
+    //Perfil
+    Route::get('/userProfile', [AccountController::class, "show"])->name('user.profile');
     Route::get('/users/{userId}edit', [AccountController::class, 'edit'])->name('users.edit');
     Route::put('/users/{userId}', [AccountController::class, 'update'])->name('users.update');
 
@@ -63,16 +68,20 @@ Route::middleware(['auth', 'role:Usuario'])->group(function() {
         'destroy' => 'delete.cart.item',
     ]);
 
-    //Perfil
-    Route::get('/userProfile', [AccountController::class, "show"])->name('user.profile');
+    
 });
+
 
 
 //Solo para el admin
 
     Route::get('/controlPanel', function(){
         return view('admin.controlPanel');
-    })->middleware(['auth', 'role:Administrador']);
+    })->name('admin.controlPanel')->middleware(['auth', 'role:Administrador']);
+
+    //Busquedas
+    Route::get('/AdminProducts/search', [AdminController::class, 'unifiedSearch'])->name('admin.products.search')
+    ->middleware(['auth', 'role:Administrador']);
 
     // Rutas de recurso para productos
     Route::resource('/AdminProducts', ProductController::class)->parameters([
@@ -85,6 +94,11 @@ Route::middleware(['auth', 'role:Usuario'])->group(function() {
         'destroy' => 'admin.products.destroy',
     ])
     ->middleware(['auth', 'role:Administrador']);
+
+    //Perfil
+    Route::get('/adminProfile', [AdminAccountController::class, "show"])->name('admin.profile');
+    Route::get('/admin/{userId}edit', [AdminAccountController::class, 'edit'])->name('admin.edit');
+    Route::put('/admin/users/{userId}', [AdminAccountController::class, 'update'])->name('admin.update');
 
     //Rutas de recurso para cuentas de usuarios
     Route::resource('/AdminUsers', userController::class)->parameters([

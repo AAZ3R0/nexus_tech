@@ -9,10 +9,10 @@
     <br>
     <br>
     <br>
-    <div class="container card text-white p-5" style="background-color: #1E2A30;">
+    <div class="container card bg-accent1 p-5">
 
         <div class="container">
-            <h2>Listada de usuarios registrados</h2><br>
+            <h1>Listada de usuarios registrados</h1><br>
 
             @if (session('success'))
             <div class="alert alert-success">
@@ -20,35 +20,34 @@
             </div>
             @endif
 
-            <div class="rounded overflow-hidden">
-                <table class="table card-table  table-bordered border-primary mb-0  text-white"
-                    style="background-color: #1E2A30;">
-                    <thead class="bg-primary text-white">
+            <div class="">
+                <table class="table mb-0" style="border-collapse: separate; border-spacing: 0;">
+                    <thead class="text-center">
                         <tr>
-                            <th class=text-white style="background-color:#1E2A30;">ID</th>
-                            <th class=text-white style="background-color:#1E2A30;">Nombre(s)</th>
-                            <th class=text-white style="background-color:#1E2A30;">Apellido(s)</th>
-                            <th class=text-white style="background-color:#1E2A30;">Correo</th>
-                            <th class=text-white style="background-color:#1E2A30;">Rol</th>
-                            <th class=text-white style="background-color:#1E2A30;">Acciones</th>
+                            <th class="bg-dark border border-primary" style="border-top-left-radius:1.2rem">ID</th>
+                            <th class="bg-dark border border-primary">Nombre(s)</th>
+                            <th class="bg-dark border border-primary">Apellido(s)</th>
+                            <th class="bg-dark border border-primary">Correo</th>
+                            <th class="bg-dark border border-primary">Rol</th>
+                            <th class="bg-dark border border-primary" style="border-top-right-radius:1.2rem">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
                         @foreach ($users as $user)
 
                         <tr>
-                            <td class=text-white style="background-color: #27373F;">{{ $user->user_id }}</td>
-                            <td class=text-white style="background-color: #27373F;">{{ $user->name }}</td>
-                            <td class=text-white style="background-color: #27373F;">{{ $user->last_name }}</td>
-                            <td class=text-white style="background-color: #27373F;">{{ $user->email }}</td>
-                            <td class=text-white style="background-color: #27373F;">{{ $user->role->name ?? 'N/A' }}
+                            <td class="bg-secondary border border-primary">{{ $user->user_id }}</td>
+                            <td class="bg-secondary border border-primary">{{ $user->name }}</td>
+                            <td class="bg-secondary border border-primary">{{ $user->last_name }}</td>
+                            <td class="bg-secondary border border-primary">{{ $user->email }}</td>
+                            <td class="bg-secondary border border-primary">{{ $user->role->name ?? 'N/A' }}
                             </td>
 
-                            <td style="background-color: #27373F;">
+                            <td class="bg-secondary border border-primary">
                                 {{-- Botón VER: Asegúrate que el ID del modal es correcto --}}
                                 <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
                                     data-bs-target="#ShowProduct{{ $user->user_id }}"><i class="bi bi-card-list"></i>
-                                    Ver</button>
+                                    Ver</button> |
 
                                 {{-- Botón ELIMINAR: Asegúrate que el ID del modal es correcto --}}
                                 <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
@@ -58,18 +57,18 @@
                         </tr>
 
                         {{-- Modal SHOW (dentro del bucle) --}}
-                        <div class="modal fade" id="ShowProduct{{ $user->user_id }}" tabindex="-1"
+                        <div class="modal fade border-0" id="ShowProduct{{ $user->user_id }}" tabindex="-1"
                             aria-labelledby="modalLabel{{ $user->user_id }}" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-lg">
-                                <div class="modal-content bg-dark text-white">
+                            <div class="modal-dialog modal-dialog-centered modal-lg border-0">
+                                <div class="modal-content bg-accent1 border-0 p-3">
                                     <div class="modal-header border-0">
-                                        <h5 class="modal-title" id="modalLabel{{ $user->user_id }}">Perfil de Usuario
-                                        </h5>
+                                        <h3 class="modal-title" id="modalLabel{{ $user->user_id }}">Perfil de Usuario
+                                        </h3>
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                             aria-label="Cerrar"></button>
                                     </div>
-                                    <div class="modal-body">
-                                        <div class="card bg-dark text-white">
+                                    <div class="modal-body border-0">
+                                        <div class="card bg-secondary border-0">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <!-- Columna de imagen (1/3) -->
@@ -122,8 +121,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer border-0">
-                                        <button type="button" class="btn btn-outline-light"
+                                    <div class="modal-footer border-0 pb-4">
+                                        <button type="button" class="btn btn-lg btn-primary rounded"
                                             data-bs-dismiss="modal">Regresar</button>
                                     </div>
                                 </div>
@@ -136,10 +135,10 @@
                         <div class="modal fade" id="DeleteProduct{{ $user->user_id }}" tabindex="-1"
                             aria-labelledby="deleteModalLabel{{ $user->user_id }}" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-lg">
-                                <div class="modal-content bg-dark text-white">
+                                <div class="modal-content bg-accent1 border-0 p-3">
                                     <div class="modal-header border-0">
-                                        <h5 class="modal-title" id="deleteModalLabel{{ $user->user_id }}">¿Estás seguro
-                                            que quieres banear este usuario?</h5>
+                                        <h3 class="modal-title" id="deleteModalLabel{{ $user->user_id }}">¿Estás seguro
+                                            que quieres banear este usuario?</h3>
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                             aria-label="Cerrar"></button>
                                     </div>
@@ -148,7 +147,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <div class="modal-body">
-                                            <div class="card bg-dark text-white ">
+                                            <div class="card bg-secondary border-0">
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <!-- Imagen (1/3) -->
@@ -203,22 +202,30 @@
                                         </div>
 
                                         <div class="modal-footer border-0">
-                                            <button type="submit" class="btn btn-outline-danger">
-                                                <i class="bi bi-trash-fill"></i> Banear
+                                            <button type="submit" class="btn btn-lg btn-outline-danger border-3 rounded">
+                                                <i class="bi bi-trash-fill"></i>  <b>Banear<b>
                                             </button>
-                                            <button type="button" class="btn btn-outline-light"
-                                                data-bs-dismiss="modal">Regresar</button>
+                                            <button type="button" class="btn btn-lg btn-primary rounded"
+                                                data-bs-dismiss="modal">Cancelar</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
-
+                        
 
                         @endforeach
+                        <tr class="text-center bg-dark">
+                            <td class="border-primary" style="border-bottom-left-radius:1.3rem"></td>
+                            <td class="border-primary"></td>
+                            <td class="border-primary"></td>
+                            <td class="border-primary"></td>
+                            <td class="border-primary"></td>
+                            <td class="border-primary" style="border-bottom-right-radius:1.3rem"></td>
+                        </tr>
                     </tbody>
                 </table>
-            </div>
+            </div><br>
             {{ $users->links('vendor.pagination.bootstrap-5') }}
         </div>
     </div>

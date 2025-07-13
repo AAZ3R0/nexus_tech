@@ -6,15 +6,21 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     @vite(['resources/js/app.js', 'resources/css/app.css'])
     <title>nexus_tech</title>
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 bg-primary" data-bs-theme="dark" style="font-family:montserrat, sans-serif">
     
     @stack('scripts')
     <!-- 🔷 NAVBAR: barra superior de navegación -->
-    <nav class=" text-white py-3 navbar navbar-expand-lg" style= "background-color: #111B1F;">
+    <nav class=" text-white py-3 navbar navbar-expand-lg bg-secondary" >
         <div class="container-fluid">
 
             <!-- Logo del sitio -->
@@ -30,9 +36,11 @@
                     <li class="nav-item me-2">
                         <a href="{{ url('/controlPanel') }} " class="nav-link link-info px-2">Panel de control</a>
                     </li>
-                    <li class="nav-item me-2">
-                        <a href="#" class="nav-link link-info px-2">Sobre nosotros</a>
+
+                    <li class="nav-item">
+                        <a href="{{ url('/adminProfile') }}" class="nav-link link-info px-2">{{ Auth::user()->username }}</a>
                     </li>
+                    
                     <li class="nav-item me-5">
                         <form action="{{ route('logout') }}" method="post">
                             @csrf
@@ -43,19 +51,29 @@
                 </ul>
 
                 <!-- 🔹 Barra de búsqueda -->
-                <form class="d-flex align-items-center me-3" role="search" style="position: relative; max-width: 500px;">
-                    <input class="form-control" type="search" placeholder="Buscar" aria-label="Search" style="padding-right: 100px;">
-                    <button class="btn btn-outline-success position-absolute" type="submit"
-                            style="top: 0; right: 0; height: 100%; border-top-left-radius: 0; border-bottom-left-radius: 0;">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </form>
+                <li class="nav-item rounded border-0 input-group-text">
+                    <form class="d-flex align-items-center" role="search"
+                        action="{{
+                            Request::is('AdminUsers*') ? route('admin.users.index') :
+                            (Request::is('AdminProducts*') ? route('admin.products.index') :
+                            route('admin.products.index'))
+                        }}"
+                        method="GET">
+                        <input class="form-control rounded border-0 w-100" type="search" placeholder="Buscar" aria-label="Search" name="query" value="{{ request('query') }}">
+
+                        <button class="btn" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+                </li>
             </div>
         </div>
     </nav>
-
-    <!-- 🔻 Contenido dinámico (Blade) -->
-    @yield('content')
+    <main class="py-5 flex-grow-1" style="font-family:roboto, sans-serif">
+        <!-- 🔻 Contenido dinámico (Blade) -->
+        @yield('content')
+    </main>
+    
 
     <!-- 🔸 FOOTER: pie de página fijo -->
     <footer class="footer d-flex text-light  mt-auto" style="background-color: #111B1F;">

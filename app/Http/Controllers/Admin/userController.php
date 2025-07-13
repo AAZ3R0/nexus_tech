@@ -12,12 +12,30 @@ use Illuminate\Support\Facades\Storage;
 
 class userController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
 
-        $users = User::where('rol_id', 2)->paginate(10);
+        $query = $request->input('query'); // Obtener el término de búsqueda
+
+        $users = User::query(); // Iniciar una nueva consulta de usuarios
+        
+        // Filtrar por rol_id = 2
+        $users->where('rol_id', 2);
+
+        if ($query) {
+            // Aplicar los filtros si hay una consulta
+            $users->where(function ($q) use ($query) {
+                $q->where('username', 'like', "%{$query}%")
+                  ->orWhere('email', 'like', "%{$query}%")
+                  ->orWhere('name', 'like', "%{$query}%");
+                // Se pueden añadir más campos por los que buscar aquí
+            });
+        }
+
+        // --- CAMBIO AQUÍ: Añadir appends() ---
+        $users = $users->paginate(10)->appends(request()->query());
+
         $roles = Role::all();
         $carts = Cart::all();
-
         return view('admin.usersTable', compact('users', 'roles', 'carts'));
     }
 
