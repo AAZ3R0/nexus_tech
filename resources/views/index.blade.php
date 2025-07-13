@@ -21,15 +21,15 @@
 
         <div class="carousel-inner h-100 rounded ">
           <div class="carousel-item active h-100">
-            <img src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_960_720.jpg"
+            <img src="{{asset('/img/carusel/nvidia gpu.png')}}"
                  class="d-block w-100 h-100 object-fit-cover" alt="...">
           </div>
           <div class="carousel-item h-100">
-            <img src="https://cdn.pixabay.com/photo/2014/08/01/00/08/pier-407252_960_720.jpg"
+            <img src="{{asset('/img/carusel/amd gpu2.jpg')}}"
                  class="d-block w-100 h-100 object-fit-cover" alt="...">
           </div>
           <div class="carousel-item h-100">
-            <img src="https://cdn.pixabay.com/photo/2015/07/09/22/45/tree-838667_960_720.jpg"
+            <img src="{{asset('/img/carusel/amd server.jpg')}}"
                  class="d-block w-100 h-100 object-fit-cover" alt="...">
           </div>
         </div>
