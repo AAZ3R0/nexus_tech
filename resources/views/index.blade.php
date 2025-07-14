@@ -22,15 +22,15 @@
         <div class="carousel-inner h-100 rounded ">
           <div class="carousel-item active h-100">
             <img src="{{asset('/img/carusel/nvidia gpu.png')}}"
-                 class="d-block w-100 h-100 object-fit-cover" alt="...">
+                 class="d-block w-100 h-100 object-fit-cover">
           </div>
           <div class="carousel-item h-100">
             <img src="{{asset('/img/carusel/amd gpu2.jpg')}}"
-                 class="d-block w-100 h-100 object-fit-cover" alt="...">
+                 class="d-block w-100 h-100 object-fit-cover">
           </div>
           <div class="carousel-item h-100">
             <img src="{{asset('/img/carusel/amd server.jpg')}}"
-                 class="d-block w-100 h-100 object-fit-cover" alt="...">
+                 class="d-block w-100 h-100 object-fit-cover">
           </div>
         </div>
 
@@ -49,10 +49,10 @@
         </div>
 
         {{-- Lista aleatoria de productos --}}
-        <div class="row bg-accent1 rounded my-5 p-5 m-auto">
-            <h1 class="py-3">Sugerencias</h1>
+        <div class="row bg-accent1 rounded p-5 my-5 m-auto">
+            <h1 class="">Sugerencias</h1>
             @foreach($randProducts as $product)
-            <div class="card m-auto p-0 bg-secondary text-accent3 border-0" style="width: 18rem;">
+            <div class="card m-auto my-3 p-0 bg-secondary text-accent3 border-0" style="width: 18rem;">
                 <img src="{{ asset('img/products/' . $product->img_name) }}" class="card-img-top" style="height:17rem">
                 <div class="card-body text-center">
                     <form class="add-to-cart-form" action="{{ route('cart.add-item') }}" method="POST">
@@ -60,6 +60,7 @@
                         <input type="hidden" name="count" value="1">
                         <h5 class="card-title">{{$product->name}}</h5>
                         <p class="card-text">$ {{ number_format($product->price, 2) }}</p>
+                        
                         <button type="button" class="btn btn-lg rounded btn-outline-info " data-bs-toggle="modal" data-bs-target="#ShowProduct{{ $product->products_id }}"><i class="bi bi-card-list"></i></button>
 
                         @csrf

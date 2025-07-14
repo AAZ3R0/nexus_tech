@@ -8,7 +8,7 @@
 
             <!-- Imagen (1/3) -->
             <div class="col-12 col-md-4">
-                <img src="{{asset('/img/logo_pagina.png')}}" class="img-fluid rounded w-100" alt="Nexus Tech">
+                <img src="{{ asset('img/Logo_pagina.png') }}" class="img-fluid rounded w-100">
             </div>
 
             <!-- Párrafo principal (2/3) -->

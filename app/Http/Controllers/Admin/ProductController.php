@@ -110,7 +110,7 @@ class ProductController extends Controller
 
 
         // Pasa los productos, tipos de producto y el precio máximo a la vista
-        return view('Products', compact('products', 'productTypes', 'maxProductPrice'));
+        return view('products', compact('products', 'productTypes', 'maxProductPrice'));
     }
 
     // El método search ya no es estrictamente necesario, ya que ProductUser maneja todo.
