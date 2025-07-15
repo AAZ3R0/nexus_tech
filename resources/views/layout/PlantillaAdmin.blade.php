@@ -104,17 +104,17 @@
                         <!-- Contacto -->
                         <div class="col-md-6">
                             <p class="mb-1 fw-bold">Contáctanos</p>
-                            <p class="mb-0"><i class="bi bi-envelope"></i> contacto@nexus.com</p>
-                            <p class="mb-0"><i class="bi bi-telephone"></i> +52 656 123 4567</p>
+                            <p class="mb-0"><i class="bi bi-envelope"></i> nexustech443@gmail.com</p>
+                            <p class="mb-0"><i class="bi bi-telephone"></i> +52 656-822-7384</p>
                         </div>
 
                         <!-- Redes sociales -->
                         <div class="col-md text-md-end">
                             <p class="mb-1">Nuestras redes sociales</p>
-                            <a href="https://facebook.com" target="_blank" class="btn btn-outline-light btn-sm me-2">
+                            <a href="https://www.facebook.com/profile.php?id=61578618472687" target="_blank" class="btn btn-outline-light btn-sm me-2">
                                 <i class="bi bi-facebook"></i>
                             </a>
-                            <a href="https://instagram.com" target="_blank" class="btn btn-outline-light btn-sm">
+                            <a href="https://www.instagram.com/nexus_tech443/" target="_blank" class="btn btn-outline-light btn-sm">
                                 <i class="bi bi-instagram"></i>
                             </a>
                         </div>
