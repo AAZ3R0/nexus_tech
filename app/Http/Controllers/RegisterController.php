@@ -23,7 +23,7 @@ class RegisterController extends Controller
             'password' => 'required|confirmed|min:6',
             'phone_number' => 'required|unique:users',
             'address' => 'required',
-            'profile_img_name' => 'nullable|image|mimes:jpg,jpeg,png|max:2040',
+            'profile_img_name' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2040',
         ]);
 
         $filename = 'default.png'; //Archivo por defecto si no ponen su perfil

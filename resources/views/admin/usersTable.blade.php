@@ -5,7 +5,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <div class="container-fluid bg-primary  flex-column justify-content-center align-items-center"
-    style="min-height: 100vh;">
+    style="min-height: 100vh; font-family: roboto">
     <br>
     <br>
     <br>
@@ -143,9 +143,7 @@
                                             aria-label="Cerrar"></button>
                                     </div>
 
-                                    <form action="{{ route('admin.users.destroy', $user->user_id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
+                                    
                                         <div class="modal-body">
                                             <div class="card bg-secondary border-0">
                                                 <div class="card-body">
@@ -200,15 +198,19 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    
 
                                         <div class="modal-footer border-0">
-                                            <button type="submit" class="btn btn-lg btn-outline-danger border-3 rounded">
-                                                <i class="bi bi-trash-fill"></i>  <b>Banear<b>
-                                            </button>
-                                            <button type="button" class="btn btn-lg btn-primary rounded"
-                                                data-bs-dismiss="modal">Cancelar</button>
+                                            <form action="{{ route('admin.users.destroy', $user->user_id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-lg btn-outline-danger border-3 rounded">
+                                                    <i class="bi bi-trash-fill"></i> <b>Banear</b> </button>
+                                                <button type="button" class="btn btn-lg btn-primary rounded"
+                                                    data-bs-dismiss="modal">Cancelar</button>
+                                            </form>
                                         </div>
-                                    </form>
+                                    
                                 </div>
                             </div>
                         </div>

@@ -76,7 +76,7 @@
     
 
     <!-- 🔸 FOOTER: pie de página fijo -->
-    <footer class="footer d-flex text-light  mt-auto" style="background-color: #111B1F;">
+    <footer class="footer d-flex text-light  mt-auto" style="background-color: #111B1F; font-family:montserrat, sans-serif">
         <div class="container-fluid py-3 mx-5">
             <div class="row align-items-center text-center text-md-start justify-content-between">
                 
